@@ -1,0 +1,810 @@
+{
+  "version": 2,
+  "productos": [
+    {
+      "nombre": "60 X 90 NEGRA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ACEITE DE ALMENDRAS",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ACEITE DE Oliva",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ACETONA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ACROMI",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ADV MAX",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "AGIN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "AGRIFEN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "AGUA DE COCO 1/4",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "AGUA OXIGENADA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ALGIDOL (IBUPROFENO)",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ALGODÓN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ALITRIPLE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ALIVIAX",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ALKA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "AMBROXOL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "AMPI",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ANALGEN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ASPI",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "BRILLANTINA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "BUSCA C/20",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CACHAMOSCAS",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CAFI",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CEPILLO COLGATE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CERILLOS ",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CONSOMATE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CONTAC",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CREMA MARITZA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CREMA NARDA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CREMA SEDAl",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "CURI",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "DESENFRIOL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "DESLITO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "DIALGIN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "DICLONACO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "DRAMAMINE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "DUAL NORDIN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ENCENDEDOR MAX",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ENCENDEDOR MINI",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "ESTOMA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "EVEREDY AA TIRA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "EVEREDY AAA TIRA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "FLANAX",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "FOCOS",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "GASA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "GENOPRASOL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "GRANODIN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "GUILLETT",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "HEAD AND SHOULDER",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "JER 3",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "JER 5",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "KETO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "KNORSUIZA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "KNORTOMATE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "KOLALOKA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "LAMINITA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "LOMO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "LOPERA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "LORATADINA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "MAMISAN POMADA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "MARUCHAN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "MEJOITO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "MI ARROZ BLANCO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "MI ARROZ ROJO ",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "MUCOAGIN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "NAPROXENO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "NEOME",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "NEXT",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "NORDINET",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "NUGGET NEGRA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "OMEPAZOL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PALILLO ",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PALMOLIVE ",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PANTENE ",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PARACE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PENTRE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PEPTO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PER TESA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PILA AA DURACELL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PILA AAA DURACELL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PLUMA AZUL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PLUMA NEGRA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "POMADA PARA LABIOS",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PROXALIN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PUMA ROJA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "PUMA VERDE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "RADIOLITO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "RAID AZUL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "RASTRILLO BIC TRES HOJAS",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "REUMOPHAN",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "SAL DE UVA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "SCARPETT",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "SEDALMERCK TIRA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "SHAMPOO SEDAL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "SUBLING",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "SUERO ELECTROLIT",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "SYNCOL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "SYNCOL MAX",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TAB AZUL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TAB DIA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TAB NOCHE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TAB ROJO",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TEM 500",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TEM FORTE",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TEM INF",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TER CAP",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TER TROS",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "THERAFLU",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TIAMINA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "TREDA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "VIPIRENA",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "VIVAPORU",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "XL3 AMARI",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "XL3 AZUL",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    },
+    {
+      "nombre": "XL3 VR",
+      "stock_inicial": "0",
+      "entradas": "0",
+      "salidas": "0",
+      "stock_actual": "0"
+    }
+  ]
+}
