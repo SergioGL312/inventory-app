@@ -32,3 +32,7 @@ container_header: {
   FAB
 
   npm install @react-native-async-storage/async-storage
+
+# Que hacer
+
+En la pantalla de entradas despues de seleccionar el producto de entrada manda el id en lugar de eso mandar el mandar un obj con id y nombre de producto o nadamas mandar el nombre del producto

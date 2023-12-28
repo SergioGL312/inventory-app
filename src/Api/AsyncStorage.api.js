@@ -2,15 +2,6 @@
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const clearAsyncStorage = async () => {
-  try {
-    await AsyncStorage.clear();
-    console.log('AsyncStorage cleared successfully');
-  } catch (error) {
-    console.error('Error clearing AsyncStorage:', error);
-  }
-};
-
 export const saveData = async (key, data) => {
   try {
     const jsonData = JSON.stringify(data);

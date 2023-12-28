@@ -1,45 +1,165 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+
+// FILTER
+import filter from 'lodash.filter';
 
 // API
 import { getProductos } from '../Api/Products.api';
 
-export default function Inventory() {
+// ROUTES
+import { ROUTES } from '../Constants/navigation.constants';
+
+// ICONS
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+export default function Inventory({ navigation, route }) {
   const [productos, setProductos] = useState([]);
+  const [fullData, setFullData] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [screen, setScreen] = useState(false);
+  const { pantallaAnterior } = route.params;
+  const [selectedItems, setSelectedItems] = useState([]);
+
+  useEffect(() => {
+    if (pantallaAnterior === 'Incoming') {
+      // console.log(`Vino desde: ${pantallaAnterior}`);
+      setScreen(true);
+    } else {
+      setScreen(false);
+    }
+  }, [pantallaAnterior, screen]);
 
   useEffect(() => {
     const fetchData = async () => {
       const productosData = await getProductos();
-      console.log(productosData);
       setProductos(productosData);
+      setFullData(productosData);
     };
 
     fetchData();
   }, []);
 
+  const handleSearch = (query) => {
+    setSearchQuery(query);
+    const formattedQuery = query.toLowerCase();
+    const filteredData = filter(fullData, (product) => {
+      return contains(product, formattedQuery);
+    });
+    setProductos(filteredData);
+  }
+  const contains = (product, query) => {
+    if (product.nombre.toLowerCase().includes(query)) {
+      return true;
+    }
+    return false;
+
+  }
+
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: '',
+      headerRight: () => (
+        <View style={styles.searchContainer}>
+          <TextInput
+            style={styles.searchInput}
+            placeholder='Search'
+            clearButtonMode='always'
+            autoCorrect={false}
+            value={searchQuery}
+            onChangeText={(query) => handleSearch(query)}
+          />
+          {searchQuery !== '' && (
+            <TouchableOpacity onPress={clearSearch}>
+              <Text style={{ color: "#ccc" }}>x</Text>
+            </TouchableOpacity>
+          )}
+        </View>
+      ),
+    });
+  }, [navigation, searchQuery]);
+
+  const clearSearch = () => {
+    setSearchQuery("");
+    setProductos(fullData);
+  };
+
   const renderProducto = ({ item }) => (
-    <View style={styles.productoContainer}>
+    <>
+      {screen ? (
+        <TouchableOpacity
+          style={[
+            styles.productoContainer,
+            selectedItems.includes(item.id_producto) && styles.selectedItem
+          ]}
+          onPress={() => toggleItemSelection(item.id_producto, item.nombre)}
+        >
+          <View>
+            <Image source={{ uri: 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.productoNombre}>{item.nombre}</Text>
+            <Text>{item.id_producto}</Text>
+          </View>
+          <View style={styles.stockActualContainer}>
+            <Text style={{ fontWeight: '500', fontSize: 14 }}>{item.stock_actual}</Text>
+          </View>
+        </TouchableOpacity>
+      ) : (
+        <View
+          style={styles.productoContainer}
+        >
 
-      <View>
-        <Image source={{ uri: 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
-      </View>
-      <View style={styles.textContainer}>
-        <Text style={styles.productoNombre}>{item.nombre}</Text>
-      </View>
+          <View>
+            <Image source={{ uri: 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
+          </View>
+          <View style={styles.textContainer}>
+            <Text style={styles.productoNombre}>{item.nombre}</Text>
+          </View>
 
-      <View style={styles.questionContainer}>
-        <Text>?</Text>
-      </View>
-    </View>
+
+          <View style={styles.stockActualContainer}>
+            <Text style={{ fontWeight: '500', fontSize: 14 }}>{item.stock_actual}</Text>
+          </View>
+        </View>
+      )}
+    </>
   );
 
+  const toggleItemSelection = (itemId, nombre) => {
+    console.log("presionado ", itemId, nombre);
+    if (selectedItems.includes(itemId)) {
+      // Si el elemento ya está seleccionado, quítalo de la lista
+      setSelectedItems((prevSelectedItems) =>
+        prevSelectedItems.filter((id) => id !== itemId)
+      );
+    } else {
+      // Si el elemento no está seleccionado, agrégalo a la lista
+      setSelectedItems((prevSelectedItems) => [...prevSelectedItems, itemId]);
+    }
+  };
+
+  const navigateToIncomingScreen = () => {
+    navigation.navigate(ROUTES.incoming, { selectedItems });
+  }
+
   return (
-    <View>
+    <View style={{ flex: 1 }}>
       <FlatList
         data={productos}
         keyExtractor={(item, index) => index.toString()}
         renderItem={renderProducto}
+        extraData={selectedItems}
       />
+      {/* <Text>Elementos seleccionados: {selectedItems.join(', ')}</Text> */}
+      {screen ? (
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={navigateToIncomingScreen}
+        >
+          <Icon name="save" size={30} color="white" />
+        </TouchableOpacity>
+      ) : null}
     </View>
   );
 }
@@ -54,24 +174,51 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   productoImagen: {
-    width: 50, // Ajusta según tus necesidades
-    height: 50, // Ajusta según tus necesidades
-    marginRight: 10, // Ajusta según tus necesidades
+    width: 50,
+    height: 50,
+    // marginRight: 10,
+    borderRadius: 50,
   },
   textContainer: {
-    backgroundColor: 'red',
     flex: 1,
-    paddingLeft: 24,
+    paddingLeft: 16,
   },
   productoNombre: {
-    paddingLeft: 24,
-    fontSize: 16,
-    fontWeight: 'normal',
+    // paddingLeft: 0,
+    fontSize: 17,
+    fontWeight: '600',
   },
-  questionContainer: {
+  stockActualContainer: {
     width: 60,
-    backgroundColor: 'yellow',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  searchInput: {
+    width: '100%',
+    marginRight: 15,
+    paddingHorizontal: 20,
+    paddingVertical: 5,
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 8,
+  },
+  searchContainer: {
+    marginRight: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  selectedItem: {
+    backgroundColor: '#B9B8F8',
+  },
+  addButton: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    backgroundColor: 'blue',
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

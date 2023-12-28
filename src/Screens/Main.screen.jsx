@@ -1,24 +1,42 @@
 import React from 'react';
 import { View, Text, SafeAreaView, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
-
+import { guardarDatosEnArchivo } from '../Api/Products.api';
 // CONSTANTS
 import { ROUTES } from '../Constants/navigation.constants';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function Main({ navigation }) {
 
   const navigateToInventoryScreen = () => {
-    navigation.navigate(ROUTES.inventory)
+    navigation.navigate(ROUTES.inventory, { pantallaAnterior: 'Main' });
+  };
+  const navigateToIncommingScreen = () => {
+    navigation.navigate(ROUTES.incoming);
   }
 
-  const saveData = async (key, data) => {
-    try {
-      const jsonData = JSON.stringify(data);
-      await AsyncStorage.setItem(key, jsonData);
-    } catch (error) {
-      console.error('Error saving data:', error);
-    }
-  };
+  const navigateToOutcomingScreen = () => {
+    navigation.navigate(ROUTES.outcoming);
+  }
 
+  const verKeys = async () => {
+    const keys = await AsyncStorage.getAllKeys();
+    if (keys.length > 0) {
+      for (const key of keys) {
+        const value = await AsyncStorage.getItem(key);
+        console.log(key, value);
+      }
+      guardarDatosEnArchivo("Productos", 'json');
+    } else {
+      console.log(`There isnt ${keys.length}`);
+    }
+  }
+
+  async function borrarKeys() {
+    console.log("Deleted");
+    await AsyncStorage.clear();
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -49,12 +67,30 @@ export default function Main({ navigation }) {
             <Text style={styles.textButton}>Inventario</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#A4E49C', borderColor: '#A4E49C' }]}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: '#A4E49C', borderColor: '#A4E49C' }]}
+            onPress={navigateToIncommingScreen}
+          >
             <Text style={styles.textButton}>Entrada de almacén</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#F1838D', borderColor: '#F1838D' }]}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: '#F1838D', borderColor: '#F1838D' }]}
+            onPress={navigateToOutcomingScreen}
+          >
             <Text style={styles.textButton}>Salida de almacén</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#80ABE2', borderColor: '#80ABE2' }]}
+            onPress={verKeys}
+          >
+            <Text style={styles.textButton}>Ver Storage</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={[styles.button, { backgroundColor: '#80ABE2', borderColor: '#80ABE2' }]}
+            onPress={borrarKeys}
+          >
+            <Text style={styles.textButton}>Borrar Storage</Text>
           </TouchableOpacity>
         </View>
 
