@@ -11,6 +11,15 @@ export default function Incoming({ navigation, route }) {
   const [currentDate, setCurrentDate] = useState('');
   const selectedItems = route.params?.selectedItems || [];
   const [quantities, setQuantities] = useState({});
+  const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    return () => {
+      setQuantities({});
+      setIsSaveButtonDisabled(true);
+    };
+  }, []); // El array vacío asegura que este efecto se ejecute solo al montar la pantalla
+
 
   useEffect(() => {
     const date = new Date();
@@ -24,22 +33,27 @@ export default function Incoming({ navigation, route }) {
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <Text>{item}</Text>
+      <Text>{item.nombre}</Text>
       <TextInput
         style={styles.quantityInput}
         placeholder="Cantidad"
         keyboardType="numeric"
-        value={quantities[item] ? quantities[item].toString() : ''}
-        onChangeText={(text) => handleQuantityChange(item, text)}
+        value={quantities[item.id_producto] ? quantities[item.id_producto] : ''}
+        onChangeText={(text) => handleQuantityChange(item.id_producto, text)}
       />
     </View>
   );
 
   const handleQuantityChange = (item, text) => {
+    console.log('line 40: ', item)
     setQuantities((prevQuantities) => ({
       ...prevQuantities,
       [item]: text.replace(/[^0-9]/g, ''),
     }));
+    console.log('Quantities:', quantities);
+    // Verificar si todos los TextInputs tienen valores
+    const allInputsFilled = selectedItems.every((selectedItem) => quantities[selectedItem.id_producto]);
+    setIsSaveButtonDisabled(!allInputsFilled);
   };
 
   return (
@@ -57,24 +71,24 @@ export default function Incoming({ navigation, route }) {
 
       {selectedItems.length > 0 ? (
         <>
-          <Text>Elementos seleccionados en otra pantalla:</Text>
           <FlatList
             data={selectedItems}
-            keyExtractor={(item) => item.toString()}
+            keyExtractor={(item) => item.id_producto.toString()}
             renderItem={renderItem}
           />
         </>
       ) : (
-        <Text>{selectedItems.length}</Text>
+        <Text>No has seleccionado ningun producto de entrada</Text>
       )}
 
       <View style={styles.buttonsContainer}>
         {selectedItems.length > 0 ? (
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: 'green' }]}
+            style={[styles.button, { backgroundColor: isSaveButtonDisabled ? '#5DA965' : 'green' }]}
             onPress={() => {
-              console.log(selectedItems);
+              console.log(quantities);
             }}
+          // disabled={isSaveButtonDisabled}
           >
             <Icon name="save" size={30} color="white" />
           </TouchableOpacity>
@@ -124,5 +138,17 @@ const styles = StyleSheet.create({
     bottom: 16,
     right: 16,
     flexDirection: 'row',
+  },
+  itemContainer: {
+    paddingLeft: 30,
+    justifyContent: 'space-between',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+  },
+  quantityInput: {
+    width: 80,
   },
 });

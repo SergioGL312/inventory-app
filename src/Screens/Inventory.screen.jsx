@@ -23,7 +23,6 @@ export default function Inventory({ navigation, route }) {
 
   useEffect(() => {
     if (pantallaAnterior === 'Incoming') {
-      // console.log(`Vino desde: ${pantallaAnterior}`);
       setScreen(true);
     } else {
       setScreen(false);
@@ -48,12 +47,12 @@ export default function Inventory({ navigation, route }) {
     });
     setProductos(filteredData);
   }
+
   const contains = (product, query) => {
     if (product.nombre.toLowerCase().includes(query)) {
       return true;
     }
     return false;
-
   }
 
   useEffect(() => {
@@ -90,9 +89,9 @@ export default function Inventory({ navigation, route }) {
         <TouchableOpacity
           style={[
             styles.productoContainer,
-            selectedItems.includes(item.id_producto) && styles.selectedItem
+            selectedItems.find((selectedItem) => selectedItem.id_producto === item.id_producto) && styles.selectedItem,
           ]}
-          onPress={() => toggleItemSelection(item.id_producto, item.nombre)}
+          onPress={() => toggleItemSelection(item)}
         >
           <View>
             <Image source={{ uri: 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
@@ -126,16 +125,18 @@ export default function Inventory({ navigation, route }) {
     </>
   );
 
-  const toggleItemSelection = (itemId, nombre) => {
-    console.log("presionado ", itemId, nombre);
-    if (selectedItems.includes(itemId)) {
+  const toggleItemSelection = (item) => {
+    console.log("presionado ", item.id_producto);
+    const isSelected = selectedItems.some((selectedItem) => selectedItem.id_producto === item.id_producto);
+
+    if (isSelected) {
       // Si el elemento ya está seleccionado, quítalo de la lista
       setSelectedItems((prevSelectedItems) =>
-        prevSelectedItems.filter((id) => id !== itemId)
+        prevSelectedItems.filter((selectedItem) => selectedItem.id_producto !== item.id_producto)
       );
     } else {
       // Si el elemento no está seleccionado, agrégalo a la lista
-      setSelectedItems((prevSelectedItems) => [...prevSelectedItems, itemId]);
+      setSelectedItems((prevSelectedItems) => [...prevSelectedItems, { id_producto: item.id_producto, nombre: item.nombre }]);
     }
   };
 
@@ -151,7 +152,7 @@ export default function Inventory({ navigation, route }) {
         renderItem={renderProducto}
         extraData={selectedItems}
       />
-      {/* <Text>Elementos seleccionados: {selectedItems.join(', ')}</Text> */}
+      <Text>Elementos seleccionados: {selectedItems.join(', ')}</Text>
       {screen ? (
         <TouchableOpacity
           style={styles.addButton}
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
   productoImagen: {
     width: 50,
     height: 50,
-    // marginRight: 10,
     borderRadius: 50,
   },
   textContainer: {
@@ -184,7 +184,6 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
   },
   productoNombre: {
-    // paddingLeft: 0,
     fontSize: 17,
     fontWeight: '600',
   },
