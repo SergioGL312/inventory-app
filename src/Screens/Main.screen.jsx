@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, SafeAreaView, StyleSheet, StatusBar, TouchableOpacity } from 'react-native';
+import { View, Text, SafeAreaView, StyleSheet, StatusBar, TouchableOpacity, ScrollView } from 'react-native';
 import { guardarDatosEnArchivo } from '../Api/Products.api';
 // CONSTANTS
 import { ROUTES } from '../Constants/navigation.constants';
@@ -60,38 +60,40 @@ export default function Main({ navigation }) {
         </View>
 
         <View style={styles.container_buttons}>
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#F7DBA4', borderColor: '#F7DBA4' }]}
-            onPress={navigateToInventoryScreen}
-          >
-            <Text style={styles.textButton}>Inventario</Text>
-          </TouchableOpacity>
+          <ScrollView>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: '#F7DBA4', borderColor: '#F7DBA4' }]}
+              onPress={navigateToInventoryScreen}
+            >
+              <Text style={styles.textButton}>Inventario</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#A4E49C', borderColor: '#A4E49C' }]}
-            onPress={navigateToIncommingScreen}
-          >
-            <Text style={styles.textButton}>Entrada de almacén</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: '#A4E49C', borderColor: '#A4E49C' }]}
+              onPress={navigateToIncommingScreen}
+            >
+              <Text style={styles.textButton}>Entrada de almacén</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: '#F1838D', borderColor: '#F1838D' }]}
-            onPress={navigateToOutcomingScreen}
-          >
-            <Text style={styles.textButton}>Salida de almacén</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: '#F1838D', borderColor: '#F1838D' }]}
+              onPress={navigateToOutcomingScreen}
+            >
+              <Text style={styles.textButton}>Salida de almacén</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#80ABE2', borderColor: '#80ABE2' }]}
-            onPress={verKeys}
-          >
-            <Text style={styles.textButton}>Ver Storage</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, { backgroundColor: '#80ABE2', borderColor: '#80ABE2' }]}
+              onPress={verKeys}
+            >
+              <Text style={styles.textButton}>Ver Storage</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={[styles.button, { backgroundColor: '#80ABE2', borderColor: '#80ABE2' }]}
-            onPress={borrarKeys}
-          >
-            <Text style={styles.textButton}>Borrar Storage</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={[styles.button, { backgroundColor: '#80ABE2', borderColor: '#80ABE2' }]}
+              onPress={borrarKeys}
+            >
+              <Text style={styles.textButton}>Borrar Storage</Text>
+            </TouchableOpacity>
+          </ScrollView>
         </View>
 
       </View>

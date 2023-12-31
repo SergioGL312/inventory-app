@@ -3,26 +3,26 @@
     {
       "id_producto": 1,
       "nombre": "60 X 90 NEGRA",
-      "stock_inicial": "0",
-      "entradas": "0",
-      "salidas": "0",
-      "stock_actual": "0"
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0
     },
     {
       "id_producto": 2,
       "nombre": "ACEITE DE ALMENDRAS",
-      "stock_inicial": "0",
-      "entradas": "0",
-      "salidas": "0",
-      "stock_actual": "0"
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0
     },
     {
       "id_producto": 3,
       "nombre": "ACEITE DE Oliva",
-      "stock_inicial": "0",
-      "entradas": "0",
-      "salidas": "0",
-      "stock_actual": "0"
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0
     }
   ]
 }

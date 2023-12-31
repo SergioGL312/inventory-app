@@ -7,6 +7,8 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 
+import { editEntries, updateStock } from '../Api/AsyncStorage.api';
+
 export default function Incoming({ navigation, route }) {
   const [currentDate, setCurrentDate] = useState('');
   const selectedItems = route.params?.selectedItems || [];
@@ -20,7 +22,6 @@ export default function Incoming({ navigation, route }) {
     };
   }, []); // El array vacío asegura que este efecto se ejecute solo al montar la pantalla
 
-
   useEffect(() => {
     const date = new Date();
     const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
@@ -31,6 +32,19 @@ export default function Incoming({ navigation, route }) {
     navigation.navigate(ROUTES.inventory, { pantallaAnterior: 'Incoming' });
   }
 
+  useEffect(() => {
+    // Verificar si todas las cantidades están llenas para habilitar/deshabilitar el botón
+    const areAllQuantitiesFilled = selectedItems.every((item) => quantities[item.id_producto] !== undefined && quantities[item.id_producto] !== '');
+    setIsSaveButtonDisabled(!areAllQuantitiesFilled);
+  }, [quantities, selectedItems]);
+
+  const updateQuantity = (productId, quantity) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: quantity,
+    }));
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Text>{item.nombre}</Text>
@@ -38,22 +52,33 @@ export default function Incoming({ navigation, route }) {
         style={styles.quantityInput}
         placeholder="Cantidad"
         keyboardType="numeric"
-        value={quantities[item.id_producto] ? quantities[item.id_producto] : ''}
-        onChangeText={(text) => handleQuantityChange(item.id_producto, text)}
+        onChangeText={(text) => updateQuantity(item.id_producto, text)}
       />
     </View>
   );
 
-  const handleQuantityChange = (item, text) => {
-    console.log('line 40: ', item)
-    setQuantities((prevQuantities) => ({
-      ...prevQuantities,
-      [item]: text.replace(/[^0-9]/g, ''),
-    }));
-    console.log('Quantities:', quantities);
-    // Verificar si todos los TextInputs tienen valores
-    const allInputsFilled = selectedItems.every((selectedItem) => quantities[selectedItem.id_producto]);
-    setIsSaveButtonDisabled(!allInputsFilled);
+  const saveData = async () => {
+    const entradaData = {
+      id_entrada: 1,
+      productos: selectedItems.map((item) => ({
+        id_producto: item.id_producto,
+        nombre_producto: item.nombre,
+        cantidad: quantities[item.id_producto] || 0,
+      })),
+      fecha: currentDate
+    };
+
+    // Ahora, puedes llamar a la función editEntries para editar las entradas de productos
+    for (const item of selectedItems) {
+      const cant = quantities[item.id_producto] || 0;
+      await editEntries('productos', item.id_producto, cant);
+      await updateStock('productos', item.id_producto, cant, true);
+
+      console.log(`${item.id_producto}.- ${item.nombre} ${cant}`);
+    }
+
+    console.log('Entradas editadas correctamente.');
+    console.log(entradaData);
   };
 
   return (
@@ -85,10 +110,8 @@ export default function Incoming({ navigation, route }) {
         {selectedItems.length > 0 ? (
           <TouchableOpacity
             style={[styles.button, { backgroundColor: isSaveButtonDisabled ? '#5DA965' : 'green' }]}
-            onPress={() => {
-              console.log(quantities);
-            }}
-          // disabled={isSaveButtonDisabled}
+            onPress={saveData}
+            disabled={isSaveButtonDisabled}
           >
             <Icon name="save" size={30} color="white" />
           </TouchableOpacity>
