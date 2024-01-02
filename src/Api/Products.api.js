@@ -3,7 +3,6 @@
 import { saveData, getData } from './AsyncStorage.api';
 import * as FileSystem from 'expo-file-system';
 
-
 const productosKey = 'productos';
 
 const initProductos = async () => {
@@ -32,10 +31,11 @@ export const getProductos = async () => {
   }
 };
 
-export const agregarProducto = async (producto) => {
+export const agregarProducto = async (nuevoProducto) => {
   try {
     const productos = await getProductos();
-    productos.push(producto);
+
+    productos.push(nuevoProducto);
     await saveData(productosKey, productos);
   } catch (error) {
     console.error('Error al agregar producto:', error);

@@ -25,7 +25,6 @@ export default function Main({ navigation }) {
     if (keys.length > 0) {
       for (const key of keys) {
         const value = await AsyncStorage.getItem(key);
-        console.log(key, value);
       }
       guardarDatosEnArchivo("Productos", 'json');
     } else {

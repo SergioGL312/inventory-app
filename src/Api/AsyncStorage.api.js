@@ -39,7 +39,6 @@ export const editarNombreProducto = async (key, idProducto, nuevoNombre) => {
         // Guardar los productos actualizados en AsyncStorage
         await saveData(key, productos);
 
-        console.log('Nombre editado correctamente.');
       } else {
         console.warn('No se encontró un producto con el ID especificado.');
       }
@@ -65,7 +64,6 @@ export const editEntries = async (key, idProducto, cant) => {
         productoEditado.entradas += parseInt(cant);
 
         await saveData(key, productos);
-        console.log('Entrada editada correctamente.');
       } else {
         console.warn('No se encontró un producto con el ID especificado.');
       }
@@ -92,8 +90,6 @@ export const updateStock = async (key, idProducto, cant, isEntrada) => {
         }
 
         await saveData(key, productos);
-
-        console.log('Stock actualizado correctamente.');
       } else {
         console.warn('No se encontró un producto con el ID especificado.');
       }

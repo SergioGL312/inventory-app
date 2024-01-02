@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Alert } from 'react-native';
 
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -68,17 +68,23 @@ export default function Incoming({ navigation, route }) {
       fecha: currentDate
     };
 
-    // Ahora, puedes llamar a la función editEntries para editar las entradas de productos
     for (const item of selectedItems) {
       const cant = quantities[item.id_producto] || 0;
       await editEntries('productos', item.id_producto, cant);
       await updateStock('productos', item.id_producto, cant, true);
-
-      console.log(`${item.id_producto}.- ${item.nombre} ${cant}`);
     }
 
-    console.log('Entradas editadas correctamente.');
-    console.log(entradaData);
+    Alert.alert(
+      'Guardado',
+      'Entradas guardadas correctamente.',
+      [
+        {
+          text: 'Aceptar',
+          onPress: () => navigation.navigate(ROUTES.main),
+        },
+      ],
+      { cancelable: false }
+    );
   };
 
   return (
@@ -103,7 +109,16 @@ export default function Incoming({ navigation, route }) {
           />
         </>
       ) : (
-        <Text>No has seleccionado ningun producto de entrada</Text>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'normal',
+              marginBottom: 20,
+              textAlign: 'center'
+            }}
+          >No has seleccionado ningun producto de entrada</Text>
+        </View>
       )}
 
       <View style={styles.buttonsContainer}>
@@ -121,7 +136,7 @@ export default function Incoming({ navigation, route }) {
           style={[styles.button, { backgroundColor: 'blue' }]}
           onPress={navigateToProductsScreen}
         >
-          <Icon name="plus" size={30} color="white" />
+          <Icon name="shopping-cart" size={30} color="white" />
         </TouchableOpacity>
       </View>
     </View>

@@ -1,17 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 
 // FILTER
 import filter from 'lodash.filter';
 
 // API
-import { getProductos } from '../Api/Products.api';
+import { getProductos, agregarProducto } from '../Api/Products.api';
 
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 
+// HOOKS
+import { useModal } from '../Hooks/modal';
+
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
+
+// rneui/base
+import { Overlay, Button } from '@rneui/base';
+
 
 export default function Inventory({ navigation, route }) {
   const [productos, setProductos] = useState([]);
@@ -20,6 +27,8 @@ export default function Inventory({ navigation, route }) {
   const [screen, setScreen] = useState(false);
   const { pantallaAnterior } = route.params;
   const [selectedItems, setSelectedItems] = useState([]);
+  const { visible, show, hide } = useModal();
+  const [textNewProduct, setTextNewProduct] = useState("");
 
   useEffect(() => {
     if (pantallaAnterior === 'Incoming') {
@@ -126,7 +135,6 @@ export default function Inventory({ navigation, route }) {
   );
 
   const toggleItemSelection = (item) => {
-    console.log("presionado ", item.id_producto);
     const isSelected = selectedItems.some((selectedItem) => selectedItem.id_producto === item.id_producto);
 
     if (isSelected) {
@@ -144,6 +152,27 @@ export default function Inventory({ navigation, route }) {
     navigation.navigate(ROUTES.incoming, { selectedItems });
   }
 
+  const onChangeTextNewProduct = (text) => {
+    setTextNewProduct(text);
+  }
+
+  const saveNewProduct = () => {
+    const nuevoProducto = {
+      id_producto: productos.length + 1,
+      nombre: textNewProduct,
+      stock_inicial: 0,
+      entradas: 0,
+      salidas: 0,
+      stock_actual: 0,
+    };
+
+    agregarProducto(nuevoProducto);
+    Alert.alert('Guardado', 'Nuevo producto guardado correctamente');
+    setTextNewProduct('');
+    hide();
+    setProductos([...productos, nuevoProducto]);
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <FlatList
@@ -152,15 +181,44 @@ export default function Inventory({ navigation, route }) {
         renderItem={renderProducto}
         extraData={selectedItems}
       />
-      <Text>Elementos seleccionados: {selectedItems.join(', ')}</Text>
-      {screen ? (
+
+      <Overlay
+        overlayStyle={{ backgroundColor: 'white', width: '60%' }}
+        isVisible={visible}
+        onBackdropPress={hide}
+      >
+        <View>
+          <Text>ASFDSADF</Text>
+          <TextInput
+            placeholder='Nombre nuevo producto'
+            onChangeText={onChangeTextNewProduct}
+          />
+        </View>
+        <Button 
+          color="#ECADAD"
+          title="Guardar"
+          onPress={saveNewProduct}
+          disabled={textNewProduct.trim() === ''}
+        />
+      </Overlay>
+
+      <View style={styles.buttonsContainer}>
+        {screen ? (//Incoming izq
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: 'green' }]}
+            onPress={navigateToIncomingScreen}
+          >
+            <Icon name="cart-plus" size={30} color="white" />
+          </TouchableOpacity>
+        ) : null}
+
         <TouchableOpacity
-          style={styles.addButton}
-          onPress={navigateToIncomingScreen}
+          style={[styles.button, { backgroundColor: 'blue' }]}
+          onPress={show}
         >
-          <Icon name="save" size={30} color="white" />
+          <Icon name="plus" size={30} color="white" />
         </TouchableOpacity>
-      ) : null}
+      </View>
     </View>
   );
 }
@@ -209,15 +267,20 @@ const styles = StyleSheet.create({
   selectedItem: {
     backgroundColor: '#B9B8F8',
   },
-  addButton: {
-    position: 'absolute',
-    bottom: 16,
-    right: 16,
-    backgroundColor: 'blue',
+  button: {
     borderRadius: 30,
     width: 60,
     height: 60,
+    marginLeft: 26,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  buttonsContainer: {
+    position: 'absolute',
+    bottom: 16,
+    right: 16,
+    flexDirection: 'row',
   },
 });
