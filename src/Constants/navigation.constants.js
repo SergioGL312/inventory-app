@@ -3,5 +3,6 @@ export const ROUTES = {
     inventory: 'Inventory',
     incoming: 'Incoming',
     outcoming: 'Outcoming',
-    products: 'Products'
+    history: 'History',
+    admin: 'Admin'
 }

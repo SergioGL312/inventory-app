@@ -21,22 +21,16 @@ export const getData = async (key) => {
   }
 };
 
-
 export const editarNombreProducto = async (key, idProducto, nuevoNombre) => {
   try {
-
-    // Obtener los productos actuales
     const productos = await getData(key);
 
     if (productos) {
-      // Encontrar el producto por su ID
       const productoEditado = productos.find((producto) => producto.id_producto === idProducto);
 
       if (productoEditado) {
-        // Actualizar el nombre del producto
         productoEditado.nombre = nuevoNombre;
 
-        // Guardar los productos actualizados en AsyncStorage
         await saveData(key, productos);
 
       } else {
@@ -50,16 +44,12 @@ export const editarNombreProducto = async (key, idProducto, nuevoNombre) => {
 
 export const editEntries = async (key, idProducto, cant) => {
   try {
-
-    // Obtener los productos actuales
     const productos = await getData(key);
 
     if (productos) {
-      // Encontrar el producto por su ID
       const productoEditado = productos.find((producto) => producto.id_producto === idProducto);
 
       if (productoEditado) {
-        // Actualizar el nombre del producto
 
         productoEditado.entradas += parseInt(cant);
 
@@ -70,6 +60,27 @@ export const editEntries = async (key, idProducto, cant) => {
     }
   } catch (error) {
     console.error('Error al editar la entrada del producto:', error);
+  }
+};
+
+export const editOutputs = async (key, idProducto, cant) => {
+  try {
+    const productos = await getData(key);
+
+    if (productos) {
+      const productoEditado = productos.find((producto) => producto.id_producto === idProducto);
+
+      if (productoEditado) {
+
+        productoEditado.salidas += parseInt(cant);
+
+        await saveData(key, productos);
+      } else {
+        console.warn('No se encontró un producto con el ID especificado.');
+      }
+    }
+  } catch (error) {
+    console.error('Error al editar la salida del producto:', error);
   }
 };
 
@@ -86,7 +97,11 @@ export const updateStock = async (key, idProducto, cant, isEntrada) => {
           producto.stock_actual += parseInt(cant);
         } else {
           // producto.salidas += parseInt(cant);
-          producto.stock_actual -= parseInt(cant);
+          if (parseInt(cant) > producto.stock_actual) {
+            console.warn('La cantidad de salida es mayor que el stock actual.');
+          } else {
+            producto.stock_actual -= parseInt(cant);
+          }
         }
 
         await saveData(key, productos);

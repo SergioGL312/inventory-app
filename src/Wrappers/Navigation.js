@@ -10,7 +10,8 @@ import Main from "../Screens/Main.screen";
 import Inventory from "../Screens/Inventory.screen";
 import Incoming from "../Screens/Incoming.screen";
 import OutComing from "../Screens/Outcoming.screen";
-import Products from "../Screens/Products.screen";
+import History from "../Screens/History.screen";
+import Admin from "../Screens/Admin.screen";
 
 // Navigation
 const Stack = createStackNavigator();
@@ -29,8 +30,13 @@ export default function Navigation() {
           component={Inventory}
         />
         <Stack.Screen name={ROUTES.incoming} component={Incoming} />
-        <Stack.Screen name={ROUTES.products} component={Products} />
         <Stack.Screen name={ROUTES.outcoming} component={OutComing} />
+        <Stack.Screen
+          name={ROUTES.history}
+          component={History}
+        />
+
+        <Stack.Screen name={ROUTES.admin} component={Admin} />
       </Stack.Navigator>
     </NavigationContainer>
   );

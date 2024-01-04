@@ -1,35 +1,5 @@
 {
   "entradas": [
-    {
-      "id_entrada": 1,
-      "productos": [
-        {
-          "id_producto": 1,
-          "nombre_producto": "60 X 90 NEGRA",
-          "cantidad": 10
-        },
-        {
-          "nombre_producto": "ACEITE DE ALMENDRAS",
-          "cantidad": 5
-        }
-      ],
-      "fecha": "26/12/2023"
-    },
-    {
-      "id_entrada": 2,
-      "productos": [
-        {
-          "id_producto": 1,
-          "nombre_producto": "60 X 90 NEGRA",
-          "cantidad": 1
-        },
-        {
-          "id_producto": 2,
-          "nombre_producto": "ACEITE DE ALMENDRAS",
-          "cantidad": 1
-        }
-      ],
-      "fecha": "27/12/2023"
-    }
+    
   ]
 }

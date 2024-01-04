@@ -24,7 +24,7 @@ export default function Inventory({ navigation, route }) {
   const [productos, setProductos] = useState([]);
   const [fullData, setFullData] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [screen, setScreen] = useState(false);
+  const [screen, setScreen] = useState('');
   const { pantallaAnterior } = route.params;
   const [selectedItems, setSelectedItems] = useState([]);
   const { visible, show, hide } = useModal();
@@ -32,9 +32,11 @@ export default function Inventory({ navigation, route }) {
 
   useEffect(() => {
     if (pantallaAnterior === 'Incoming') {
-      setScreen(true);
+      setScreen('Incoming');
+    } else if (pantallaAnterior === 'Outcoming') {
+      setScreen('Outcoming');
     } else {
-      setScreen(false);
+      setScreen('Main');
     }
   }, [pantallaAnterior, screen]);
 
@@ -94,7 +96,7 @@ export default function Inventory({ navigation, route }) {
 
   const renderProducto = ({ item }) => (
     <>
-      {screen ? (
+      {screen === 'Incoming' || screen === 'Outcoming' ? (
         <TouchableOpacity
           style={[
             styles.productoContainer,
@@ -136,20 +138,21 @@ export default function Inventory({ navigation, route }) {
 
   const toggleItemSelection = (item) => {
     const isSelected = selectedItems.some((selectedItem) => selectedItem.id_producto === item.id_producto);
-
     if (isSelected) {
-      // Si el elemento ya está seleccionado, quítalo de la lista
       setSelectedItems((prevSelectedItems) =>
         prevSelectedItems.filter((selectedItem) => selectedItem.id_producto !== item.id_producto)
       );
     } else {
-      // Si el elemento no está seleccionado, agrégalo a la lista
-      setSelectedItems((prevSelectedItems) => [...prevSelectedItems, { id_producto: item.id_producto, nombre: item.nombre }]);
+      setSelectedItems((prevSelectedItems) => [...prevSelectedItems, { id_producto: item.id_producto, nombre: item.nombre, stock_actual: item.stock_actual }]);
     }
   };
 
-  const navigateToIncomingScreen = () => {
-    navigation.navigate(ROUTES.incoming, { selectedItems });
+  const navigateToScreen = () => {
+    if (screen === 'Incoming') {
+      navigation.navigate(ROUTES.incoming, { selectedItems });
+    } else {
+      navigation.navigate(ROUTES.outcoming, { selectedItems });
+    }
   }
 
   const onChangeTextNewProduct = (text) => {
@@ -183,35 +186,38 @@ export default function Inventory({ navigation, route }) {
       />
 
       <Overlay
-        overlayStyle={{ backgroundColor: 'white', width: '60%' }}
+        overlayStyle={{ backgroundColor: 'white', width: '80%', padding: 20, height: '25%', justifyContent: 'center' }}
         isVisible={visible}
         onBackdropPress={hide}
       >
         <View>
-          <Text>ASFDSADF</Text>
+          <Text style={{ fontSize: 18, marginBottom: 10, fontWeight: 'bold' }}>Nuevo producto</Text>
           <TextInput
+            style={{ borderColor: 'gray', borderWidth: 1, padding: 10, marginBottom: 20 }}
             placeholder='Nombre nuevo producto'
             onChangeText={onChangeTextNewProduct}
           />
         </View>
-        <Button 
+        <Button
           color="#ECADAD"
           title="Guardar"
           onPress={saveNewProduct}
           disabled={textNewProduct.trim() === ''}
+          style={{ marginTop: 20 }}
         />
       </Overlay>
 
       <View style={styles.buttonsContainer}>
-        {screen ? (//Incoming izq
+        {screen === 'Incoming' || screen === 'Outcoming' ? (//Incoming izq
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: 'green' }]}
-            onPress={navigateToIncomingScreen}
+            style={[styles.button, { backgroundColor: screen === 'Incoming' ? 'green' : 'red' }]}
+            onPress={navigateToScreen}
           >
             <Icon name="cart-plus" size={30} color="white" />
           </TouchableOpacity>
         ) : null}
 
+        { }
         <TouchableOpacity
           style={[styles.button, { backgroundColor: 'blue' }]}
           onPress={show}

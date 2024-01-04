@@ -8,19 +8,31 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { ROUTES } from '../Constants/navigation.constants';
 
 import { editEntries, updateStock } from '../Api/AsyncStorage.api';
+import { getEntradas, editNewDocEntries } from '../Api/Entries.api';
 
 export default function Incoming({ navigation, route }) {
   const [currentDate, setCurrentDate] = useState('');
   const selectedItems = route.params?.selectedItems || [];
   const [quantities, setQuantities] = useState({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
+  const [noDoc, setNoDoc] = useState(0);
 
   useEffect(() => {
     return () => {
       setQuantities({});
       setIsSaveButtonDisabled(true);
     };
-  }, []); // El array vacío asegura que este efecto se ejecute solo al montar la pantalla
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const entradas = await getEntradas();
+      const size = Object.keys(entradas).length + 1;
+      setNoDoc(size);
+    }
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     const date = new Date();
@@ -33,7 +45,6 @@ export default function Incoming({ navigation, route }) {
   }
 
   useEffect(() => {
-    // Verificar si todas las cantidades están llenas para habilitar/deshabilitar el botón
     const areAllQuantitiesFilled = selectedItems.every((item) => quantities[item.id_producto] !== undefined && quantities[item.id_producto] !== '');
     setIsSaveButtonDisabled(!areAllQuantitiesFilled);
   }, [quantities, selectedItems]);
@@ -59,7 +70,7 @@ export default function Incoming({ navigation, route }) {
 
   const saveData = async () => {
     const entradaData = {
-      id_entrada: 1,
+      id_entrada: noDoc,
       productos: selectedItems.map((item) => ({
         id_producto: item.id_producto,
         nombre_producto: item.nombre,
@@ -67,6 +78,8 @@ export default function Incoming({ navigation, route }) {
       })),
       fecha: currentDate
     };
+
+    editNewDocEntries(entradaData);
 
     for (const item of selectedItems) {
       const cant = quantities[item.id_producto] || 0;
@@ -96,7 +109,7 @@ export default function Incoming({ navigation, route }) {
         </View>
         <View style={[styles.noInContainer, { flex: 1 }]}>
           <Text style={{ paddingBottom: 12, fontSize: 16 }}>No. doc.</Text>
-          <Text style={{ borderBottomWidth: 1, width: "90%", color: "#616A6B" }}>0000001</Text>
+          <Text style={{ borderBottomWidth: 1, width: "90%", color: "#616A6B" }}>{noDoc}</Text>
         </View>
       </View>
 
@@ -147,20 +160,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  button: {
-    borderRadius: 30,
-    width: 60,
-    height: 60,
-    marginLeft: 26,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   infoIncommingContainer: {
     flexDirection: 'row',
     height: 96,
-    backgroundColor: "#B9B8F8",
+    backgroundColor: "#CBF8B8",
+    // B9B8F8
   },
   dateContainer: {
     justifyContent: 'center',
@@ -176,6 +180,16 @@ const styles = StyleSheet.create({
     bottom: 16,
     right: 16,
     flexDirection: 'row',
+  },
+  button: {
+    borderRadius: 30,
+    width: 60,
+    height: 60,
+    marginLeft: 26,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   itemContainer: {
     paddingLeft: 30,

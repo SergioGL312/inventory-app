@@ -42,17 +42,22 @@ En la pantalla de entradas despues de seleccionar el producto de entrada manda e
 
  <!-- - Centrar texto de Incomming screen (ver si agregar img) -->
 
- - Pantalla de Salidas
+  <!-- - Pantalla de Salidas
+    - Evitar numeros negativos al hacer salidas -->
 
- - Guardar el historial de entradas con cambio de No. doc
 
- - En cierto tiempo reiniciar el etries.json y outputs.json
+
+ - Guardar el historial de entradas y salidas con cambio de No. doc
+
+ - En cierto tiempo reiniciar el entries.json y outputs.json
 {
   "entradas": [
   ]
 }
 
- - Descargar el P1.json
+  <!-- - Agregar un btn de unico acceso para hacer lo sig
+    - Descargar el P1.json
+    - Borrar storage -->
 
  - Separar por componentes
 

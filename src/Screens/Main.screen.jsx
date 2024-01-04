@@ -1,13 +1,18 @@
-import React from 'react';
-import { View, Text, SafeAreaView, StyleSheet, StatusBar, TouchableOpacity, ScrollView } from 'react-native';
-import { guardarDatosEnArchivo } from '../Api/Products.api';
+import React, { useEffect, useState } from 'react';
+import { View, Text, SafeAreaView, StyleSheet, StatusBar, TouchableOpacity, ScrollView, Image } from 'react-native';
+
 // CONSTANTS
 import { ROUTES } from '../Constants/navigation.constants';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
-
 export default function Main({ navigation }) {
+  const [countCLick, setCountCLick] = useState(0);
+
+  useEffect(() => {
+    if (countCLick === 10) {
+      navigation.navigate(ROUTES.admin);
+      setCountCLick(0);
+    }
+  }, [countCLick]);
 
   const navigateToInventoryScreen = () => {
     navigation.navigate(ROUTES.inventory, { pantallaAnterior: 'Main' });
@@ -20,21 +25,13 @@ export default function Main({ navigation }) {
     navigation.navigate(ROUTES.outcoming);
   }
 
-  const verKeys = async () => {
-    const keys = await AsyncStorage.getAllKeys();
-    if (keys.length > 0) {
-      for (const key of keys) {
-        const value = await AsyncStorage.getItem(key);
-      }
-      guardarDatosEnArchivo("Productos", 'json');
-    } else {
-      console.log(`There isnt ${keys.length}`);
-    }
+  const navigateToHistoryScreen = () => {
+    navigation.navigate(ROUTES.history);
   }
 
-  async function borrarKeys() {
-    console.log("Deleted");
-    await AsyncStorage.clear();
+  const handleButtonClick = () => {
+    setCountCLick((prevCount) => prevCount + 1);
+    console.log(countCLick+1);
   }
 
   return (
@@ -59,38 +56,92 @@ export default function Main({ navigation }) {
         </View>
 
         <View style={styles.container_buttons}>
-          <ScrollView>
+          <ScrollView
+            showsVerticalScrollIndicator={false}
+            showsHorizontalScrollIndicator={false}
+          >
             <TouchableOpacity
               style={[styles.button, { backgroundColor: '#F7DBA4', borderColor: '#F7DBA4' }]}
               onPress={navigateToInventoryScreen}
             >
-              <Text style={styles.textButton}>Inventario</Text>
+              <View style={styles.buttonContent}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={require('../../assets/image-main/inventario.png')}
+                    style={styles.buttonImage}
+                  />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.textButton}>Inventario</Text>
+                </View>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.button, { backgroundColor: '#A4E49C', borderColor: '#A4E49C' }]}
               onPress={navigateToIncommingScreen}
             >
-              <Text style={styles.textButton}>Entrada de almacén</Text>
+              <View style={styles.buttonContent}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={require('../../assets/image-main/entradas.png')}
+                    style={[styles.buttonImage, { width: 80 }]}
+                  />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.textButton}>Entrada de almacén</Text>
+                </View>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={[styles.button, { backgroundColor: '#F1838D', borderColor: '#F1838D' }]}
               onPress={navigateToOutcomingScreen}
             >
-              <Text style={styles.textButton}>Salida de almacén</Text>
+              <View style={styles.buttonContent}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={require('../../assets/image-main/salidas.png')}
+                    style={[styles.buttonImage, { width: 80 }]}
+                  />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.textButton}>Salida de almacén</Text>
+                </View>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity style={[styles.button, { backgroundColor: '#80ABE2', borderColor: '#80ABE2' }]}
-              onPress={verKeys}
+              onPress={navigateToHistoryScreen}
             >
-              <Text style={styles.textButton}>Ver Storage</Text>
+              <View style={styles.buttonContent}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={require('../../assets/image-main/historial.png')}
+                    style={styles.buttonImage}
+                  />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.textButton}>Ver Historial</Text>
+                </View>
+              </View>
             </TouchableOpacity>
 
-            <TouchableOpacity style={[styles.button, { backgroundColor: '#80ABE2', borderColor: '#80ABE2' }]}
-              onPress={borrarKeys}
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: '#D2B4DE', borderColor: '#D2B4DE' }]}
+              onPress={handleButtonClick}
             >
-              <Text style={styles.textButton}>Borrar Storage</Text>
+              <View style={styles.buttonContent}>
+                <View style={styles.imageContainer}>
+                  <Image
+                    source={require('../../assets/image-main/unnamed.png')}
+                    style={[styles.buttonImage, { borderRadius: 50 }]}
+                  />
+                </View>
+                <View style={styles.textContainer}>
+                  <Text style={styles.textButton}>Admin</Text>
+                </View>
+              </View>
             </TouchableOpacity>
           </ScrollView>
         </View>
@@ -108,12 +159,10 @@ const styles = StyleSheet.create({
   content: {
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
-    // backgroundColor: '#FEF5E7'
   },
   container_header: {
     width: '100%',
     height: 226,
-    // backgroundColor: '#ABEBC6',
     paddingTop: 28,
     paddingVertical: 80,
     paddingHorizontal: 40,
@@ -126,12 +175,8 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     alignItems: 'center',
-    borderWidth: 1,
-    paddingTop: 70,
-    // borderColor: '#9B59B6',
-    borderColor: 'white',
-
-    // backgroundColor: '#E8DAEF',
+    // borderWidth: 1,
+    // borderColor: 'white',
   },
   bienvenidoText: {
     fontSize: 48,
@@ -154,5 +199,28 @@ const styles = StyleSheet.create({
   textButton: {
     fontSize: 16,
     fontWeight: 'normal',
+    marginLeft: 20,
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  buttonImage: {
+    width: 50,
+    height: 50,
+  },
+  imageContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  textContainer: {
+    flex: 2,
+    justifyContent: 'flex-start',
+    alignItems: 'flex-start'
   }
+
 });
