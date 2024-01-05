@@ -60,6 +60,7 @@ export const guardarDatosEnArchivo = async (nombreArchivo, formato) => {
       await FileSystem.writeAsStringAsync(rutaArchivo, contenidoArchivo);
 
       console.log(`Archivo ${rutaArchivo} creado correctamente.`);
+      return `Archivo ${rutaArchivo} creado correctamente.`;
     } else {
       console.log('No hay datos en AsyncStorage para guardar en el archivo.');
     }

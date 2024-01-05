@@ -16,6 +16,7 @@ export default function Outcoming({ navigation, route }) {
   const [quantities, setQuantities] = useState({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
   const [noDoc, setNoDoc] = useState(0);
+  const [quantityErrors, setQuantityErrors] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,20 +39,33 @@ export default function Outcoming({ navigation, route }) {
   }
 
   useEffect(() => {
-    const areAllQuantitiesFilled = selectedItems.every((item) => quantities[item.id_producto] !== undefined && quantities[item.id_producto] !== '');
-    setIsSaveButtonDisabled(!areAllQuantitiesFilled);
+    const areAllQuantitiesFilled = selectedItems.every((item) =>
+      quantities[item.id_producto] !== undefined &&
+      quantities[item.id_producto] !== '' &&
+      quantities[item.id_producto] <= item.stock_actual
+    );
+
+    setIsSaveButtonDisabled(!areAllQuantitiesFilled); // true - negado false
   }, [quantities, selectedItems]);
 
-  const updateQuantity = (productId, quantity, stock_actual) => {
+  const updateQuantity = (productId, quantity, stock_actual, nombre_producto) => {
+    setQuantities((prevQuantities) => ({
+      ...prevQuantities,
+      [productId]: quantity,
+    }));
     if (quantity > stock_actual) {
+      setQuantityErrors((prevErrors) => ({
+        ...prevErrors,
+        [productId]: true,
+      }));
       Alert.alert(
         'Error',
-        `La cantidad de salida es mayor que el stock actual.`,
+        `La cantidad de salida de ${nombre_producto} es mayor que el stock actual.`,
       );
     } else {
-      setQuantities((prevQuantities) => ({
-        ...prevQuantities,
-        [productId]: quantity,
+      setQuantityErrors((prevErrors) => ({
+        ...prevErrors,
+        [productId]: false,
       }));
     }
 
@@ -59,12 +73,13 @@ export default function Outcoming({ navigation, route }) {
 
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
-      <Text>{item.nombre}</Text>
+      <Text style={{ color: quantityErrors[item.id_producto] ? 'red' : 'black' }}>{item.nombre}</Text>
       <TextInput
-        style={styles.quantityInput}
+        style={[styles.quantityInput, { color: quantityErrors[item.id_producto] ? 'red' : 'black' }]}
         placeholder="Cantidad"
         keyboardType="numeric"
-        onChangeText={(text) => updateQuantity(item.id_producto, text, item.stock_actual)}
+        value={(quantities[item.id_producto] || '').toString()}
+        onChangeText={(text) => updateQuantity(item.id_producto, text, item.stock_actual, item.nombre)}
       />
     </View>
   );

@@ -51,7 +51,7 @@ export const editEntries = async (key, idProducto, cant) => {
 
       if (productoEditado) {
 
-        productoEditado.entradas += parseInt(cant);
+        productoEditado.entradas += parseFloat(cant);
 
         await saveData(key, productos);
       } else {
@@ -72,7 +72,7 @@ export const editOutputs = async (key, idProducto, cant) => {
 
       if (productoEditado) {
 
-        productoEditado.salidas += parseInt(cant);
+        productoEditado.salidas += parseFloat(cant);
 
         await saveData(key, productos);
       } else {
@@ -93,14 +93,14 @@ export const updateStock = async (key, idProducto, cant, isEntrada) => {
 
       if (producto) {
         if (isEntrada) {
-          // producto.entradas += parseInt(cant);
-          producto.stock_actual += parseInt(cant);
+          // producto.entradas += parseFloat(cant);
+          producto.stock_actual += parseFloat(cant);
         } else {
-          // producto.salidas += parseInt(cant);
-          if (parseInt(cant) > producto.stock_actual) {
+          // producto.salidas += parseFloat(cant);
+          if (parseFloat(cant) > producto.stock_actual) {
             console.warn('La cantidad de salida es mayor que el stock actual.');
           } else {
-            producto.stock_actual -= parseInt(cant);
+            producto.stock_actual -= parseFloat(cant);
           }
         }
 

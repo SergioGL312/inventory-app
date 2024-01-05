@@ -10,7 +10,9 @@ export default function EntriesHistory() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        console.log(`13: data ${data}`);
         const result = await getEntradas();
+        console.log(`15: result ${result}`);
         setData(result);
       } catch (error) {
         console.error('Error fetching data:', error);

@@ -7,7 +7,6 @@ const entradasKey = 'entradas';
 const initEntradas = async () => {
   try {
     const entradas = await getData(entradasKey);
-    console.log(`Entries.api: ${entradas}`);
     if (!entradas || entradas.length === 0) {
       const initialData = require('../Data/entries.json');
       await saveData(entradasKey, initialData.entradas);
