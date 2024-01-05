@@ -8,7 +8,7 @@ export default function Main({ navigation }) {
   const [countCLick, setCountCLick] = useState(0);
 
   useEffect(() => {
-    if (countCLick === 10) {
+    if (countCLick === 5) {
       navigation.navigate(ROUTES.admin);
       setCountCLick(0);
     }

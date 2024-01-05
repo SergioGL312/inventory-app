@@ -29,6 +29,8 @@ export default function Inventory({ navigation, route }) {
   const [selectedItems, setSelectedItems] = useState([]);
   const { visible, show, hide } = useModal();
   const [textNewProduct, setTextNewProduct] = useState("");
+  const [cantNewProduct, setCantNewProduct] = useState(0);
+
 
   useEffect(() => {
     if (pantallaAnterior === 'Incoming') {
@@ -159,6 +161,11 @@ export default function Inventory({ navigation, route }) {
     setTextNewProduct(text);
   }
 
+  const onChangeCantNewProduct = (text) => {
+    const newCant = text !== '' ? parseInt(text) : 0;
+    setCantNewProduct(newCant);
+  }
+
   const saveNewProduct = () => {
     const nuevoProducto = {
       id_producto: productos.length + 1,
@@ -166,7 +173,7 @@ export default function Inventory({ navigation, route }) {
       stock_inicial: 0,
       entradas: 0,
       salidas: 0,
-      stock_actual: 0,
+      stock_actual: cantNewProduct,
     };
 
     agregarProducto(nuevoProducto);
@@ -186,7 +193,7 @@ export default function Inventory({ navigation, route }) {
       />
 
       <Overlay
-        overlayStyle={{ backgroundColor: 'white', width: '80%', padding: 20, height: '25%', justifyContent: 'center' }}
+        overlayStyle={{ backgroundColor: 'white', width: '80%', padding: 20, height: '60%', justifyContent: 'center' }}
         isVisible={visible}
         onBackdropPress={hide}
       >
@@ -196,6 +203,12 @@ export default function Inventory({ navigation, route }) {
             style={{ borderColor: 'gray', borderWidth: 1, padding: 10, marginBottom: 20 }}
             placeholder='Nombre nuevo producto'
             onChangeText={onChangeTextNewProduct}
+          />
+          <TextInput
+            style={{ borderColor: 'gray', borderWidth: 1, padding: 10, marginBottom: 20 }}
+            placeholder="0"
+            keyboardType="numeric"
+            onChangeText={onChangeCantNewProduct}
           />
         </View>
         <Button
