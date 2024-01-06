@@ -31,7 +31,6 @@ export default function Inventory({ navigation, route }) {
   const [textNewProduct, setTextNewProduct] = useState("");
   const [cantNewProduct, setCantNewProduct] = useState(0);
 
-
   useEffect(() => {
     if (pantallaAnterior === 'Incoming') {
       setScreen('Incoming');
@@ -96,7 +95,7 @@ export default function Inventory({ navigation, route }) {
     setProductos(fullData);
   };
 
-  const renderProducto = ({ item }) => (
+  const RenderProducto = React.memo(({ item, imagenUri }) => (
     <>
       {screen === 'Incoming' || screen === 'Outcoming' ? (
         <TouchableOpacity
@@ -107,7 +106,7 @@ export default function Inventory({ navigation, route }) {
           onPress={() => toggleItemSelection(item)}
         >
           <View>
-            <Image source={{ uri: 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
+            <Image source={{ uri: imagenUri }} style={styles.productoImagen} />
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.productoNombre}>{item.nombre}</Text>
@@ -136,7 +135,7 @@ export default function Inventory({ navigation, route }) {
         </View>
       )}
     </>
-  );
+  ));
 
   const toggleItemSelection = (item) => {
     const isSelected = selectedItems.some((selectedItem) => selectedItem.id_producto === item.id_producto);
@@ -188,7 +187,7 @@ export default function Inventory({ navigation, route }) {
       <FlatList
         data={productos}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={renderProducto}
+        renderItem={({ item }) => <RenderProducto item={item} imagenUri={'https://picsum.photos/200/200'} />}
         extraData={selectedItems}
       />
 

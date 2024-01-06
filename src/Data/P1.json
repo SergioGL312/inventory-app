@@ -2,27 +2,923 @@
   "productos": [
     {
       "id_producto": 1,
-      "nombre": "60 X 90 NEGRA",
+      "nombre": "aceite de almendras",
       "stock_inicial": 0,
       "entradas": 0,
       "salidas": 0,
-      "stock_actual": 0
+      "stock_actual": 10.0
     },
     {
       "id_producto": 2,
-      "nombre": "ACEITE DE ALMENDRAS",
+      "nombre": "aceite de oliva",
       "stock_inicial": 0,
       "entradas": 0,
       "salidas": 0,
-      "stock_actual": 0
+      "stock_actual": 0.0
     },
     {
       "id_producto": 3,
-      "nombre": "ACEITE DE Oliva",
+      "nombre": "acetona",
       "stock_inicial": 0,
       "entradas": 0,
       "salidas": 0,
-      "stock_actual": 0
+      "stock_actual": 13.0
+    },
+    {
+      "id_producto": 4,
+      "nombre": "acromicina adulto",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 45.0
+    },
+    {
+      "id_producto": 5,
+      "nombre": "advil capsula de 200mg c/10",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 6,
+      "nombre": "agin",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 7,
+      "nombre": "agrifen c/10",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 6.0
+    },
+    {
+      "id_producto": 8,
+      "nombre": "agua oxigenada",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 6.0
+    },
+    {
+      "id_producto": 9,
+      "nombre": "aguitas c/36 de 250ml",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 216.0
+    },
+    {
+      "id_producto": 10,
+      "nombre": "algidol",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 13.0
+    },
+    {
+      "id_producto": 11,
+      "nombre": "algodon 3gr jaloma c/100",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 12,
+      "nombre": "aliviax",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 13,
+      "nombre": "alka-seltzer c/100",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 14,
+      "nombre": "amoxicilina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 3.0
+    },
+    {
+      "id_producto": 15,
+      "nombre": "ampicilina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 16,
+      "nombre": "analgen 550",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 5.0
+    },
+    {
+      "id_producto": 17,
+      "nombre": "analgen c/20",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 6.0
+    },
+    {
+      "id_producto": 18,
+      "nombre": "aspirina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 20.5
+    },
+    {
+      "id_producto": 19,
+      "nombre": "aspirina efervecente",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 3.0
+    },
+    {
+      "id_producto": 20,
+      "nombre": "barmicil",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 4.0
+    },
+    {
+      "id_producto": 21,
+      "nombre": "buscapina compuesta c/20",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 16.0
+    },
+    {
+      "id_producto": 22,
+      "nombre": "cachamoscas",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 5.0
+    },
+    {
+      "id_producto": 23,
+      "nombre": "cafiaspirina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 14.0
+    },
+    {
+      "id_producto": 24,
+      "nombre": "cepillo colgate 6 + 1",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 25,
+      "nombre": "cerillos",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 16.0
+    },
+    {
+      "id_producto": 26,
+      "nombre": "consomate",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 27,
+      "nombre": "contact ultra",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 28,
+      "nombre": "cotonetes",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 29,
+      "nombre": "crema p/labios",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 30,
+      "nombre": "crema sedal",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 3.0
+    },
+    {
+      "id_producto": 31,
+      "nombre": "curita",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 32,
+      "nombre": "desenfriol d",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 20.0
+    },
+    {
+      "id_producto": 33,
+      "nombre": "desenfriolito",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 17.0
+    },
+    {
+      "id_producto": 34,
+      "nombre": "dialgin",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 3.0
+    },
+    {
+      "id_producto": 35,
+      "nombre": "diclofenaco",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 36,
+      "nombre": "dramamine",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 28.0
+    },
+    {
+      "id_producto": 37,
+      "nombre": "duals nordin",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 15.0
+    },
+    {
+      "id_producto": 38,
+      "nombre": "duracell AA",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 39,
+      "nombre": "duracell AAA",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 40,
+      "nombre": "encendedor bic mini",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 41,
+      "nombre": "encendedor bic regular",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 42,
+      "nombre": "estomaquil",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 43,
+      "nombre": "flanax",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 12.0
+    },
+    {
+      "id_producto": 44,
+      "nombre": "foco",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 8.0
+    },
+    {
+      "id_producto": 45,
+      "nombre": "galletas",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 46,
+      "nombre": "gasa grande c/100",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 47,
+      "nombre": "genoprazol",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 48,
+      "nombre": "glicerina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 49,
+      "nombre": "graneodin c/24",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 6.0
+    },
+    {
+      "id_producto": 50,
+      "nombre": "guillete navajas ",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 5.0
+    },
+    {
+      "id_producto": 51,
+      "nombre": "head&showder",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 52,
+      "nombre": "jeringa 3ml c/5",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 53,
+      "nombre": "jeringa 3ml infantil c/5",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 54,
+      "nombre": "jeringa 5ml c/5",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 55,
+      "nombre": "jeringa insulina 5ml",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 5.0
+    },
+    {
+      "id_producto": 56,
+      "nombre": "ketorolaco mavidol sub c/6",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 19.0
+    },
+    {
+      "id_producto": 57,
+      "nombre": "ketorolaco voydol c/6",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 17.0
+    },
+    {
+      "id_producto": 58,
+      "nombre": "knor suiza c/50",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 59,
+      "nombre": "kola loka tradi",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 60,
+      "nombre": "ladexgel",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 8.0
+    },
+    {
+      "id_producto": 61,
+      "nombre": "laminitas raid",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 62,
+      "nombre": "lomotil c/8",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 38.0
+    },
+    {
+      "id_producto": 63,
+      "nombre": "loperamida",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 64,
+      "nombre": "mejoralito c/30",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 7.0
+    },
+    {
+      "id_producto": 65,
+      "nombre": "melox",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 66,
+      "nombre": "mi arroz rojo",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 3.0
+    },
+    {
+      "id_producto": 67,
+      "nombre": "micropor c/24",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 68,
+      "nombre": "mucoagin",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 69,
+      "nombre": "naproxeno",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 9.0
+    },
+    {
+      "id_producto": 70,
+      "nombre": "neome",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 19.0
+    },
+    {
+      "id_producto": 71,
+      "nombre": "next",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 16.0
+    },
+    {
+      "id_producto": 72,
+      "nombre": "nordinet",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 3.0
+    },
+    {
+      "id_producto": 73,
+      "nombre": "omeoprazol",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 12.0
+    },
+    {
+      "id_producto": 74,
+      "nombre": "palillo",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 75,
+      "nombre": "palmolive",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 76,
+      "nombre": "paracetamol",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 4.0
+    },
+    {
+      "id_producto": 77,
+      "nombre": "penicilina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 15.0
+    },
+    {
+      "id_producto": 78,
+      "nombre": "pepto bismol c/24",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 3.0
+    },
+    {
+      "id_producto": 79,
+      "nombre": "perlas de tesalon c/20",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 15.0
+    },
+    {
+      "id_producto": 80,
+      "nombre": "pluma azul",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 81,
+      "nombre": "pluma negra",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 7.0
+    },
+    {
+      "id_producto": 82,
+      "nombre": "pluma roja",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 83,
+      "nombre": "pluma verde",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 84,
+      "nombre": "prodolina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 85,
+      "nombre": "proxalin",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 10.0
+    },
+    {
+      "id_producto": 86,
+      "nombre": "raidiolitos",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 10.0
+    },
+    {
+      "id_producto": 87,
+      "nombre": "rastrillo bic 3 hojas",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 88,
+      "nombre": "rastrillo guillete",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 20.0
+    },
+    {
+      "id_producto": 89,
+      "nombre": "sacapuntas",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 90,
+      "nombre": "sal de uvas",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 91,
+      "nombre": "sedal",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 92,
+      "nombre": "sedalmerck max",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 93,
+      "nombre": "sedalmerck tira",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 47.0
+    },
+    {
+      "id_producto": 94,
+      "nombre": "suero electrolit",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 95,
+      "nombre": "syncol",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 96,
+      "nombre": "syncol max",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 97,
+      "nombre": "tabcin azul",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 98,
+      "nombre": "tabcin dia",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 16.0
+    },
+    {
+      "id_producto": 99,
+      "nombre": "tabcin efervecente 500",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 1.0
+    },
+    {
+      "id_producto": 100,
+      "nombre": "tabcin noche",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 7.0
+    },
+    {
+      "id_producto": 101,
+      "nombre": "tempra 500",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 5.0
+    },
+    {
+      "id_producto": 102,
+      "nombre": "tempra forte",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 12.0
+    },
+    {
+      "id_producto": 103,
+      "nombre": "tempra infantil",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 15.0
+    },
+    {
+      "id_producto": 104,
+      "nombre": "terramicina capsula",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 15.0
+    },
+    {
+      "id_producto": 105,
+      "nombre": "terramicina troc",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 8.0
+    },
+    {
+      "id_producto": 106,
+      "nombre": "theraflu te ",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 107,
+      "nombre": "tiamina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 2.0
+    },
+    {
+      "id_producto": 108,
+      "nombre": "treda",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 11.0
+    },
+    {
+      "id_producto": 109,
+      "nombre": "venda 5",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 10.0
+    },
+    {
+      "id_producto": 110,
+      "nombre": "vickpyrena",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 111,
+      "nombre": "vickvaporub",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 0.0
+    },
+    {
+      "id_producto": 112,
+      "nombre": "vitacilina",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 3.0
+    },
+    {
+      "id_producto": 113,
+      "nombre": "xl3 c/8",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 11.0
+    },
+    {
+      "id_producto": 114,
+      "nombre": "xl3 VR",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 15.0
+    },
+    {
+      "id_producto": 115,
+      "nombre": "xl3 xtra c/12",
+      "stock_inicial": 0,
+      "entradas": 0,
+      "salidas": 0,
+      "stock_actual": 14.0
     }
   ]
 }

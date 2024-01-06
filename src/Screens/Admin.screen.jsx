@@ -42,6 +42,25 @@ const Main = ({ navigation }) => {
     setEditedText(JSON.stringify(result, null, 2));
   };
 
+  const actualizarProductos = async () => {
+    try {
+      // Obtén el texto actualizado desde el estado
+      const nuevosProductos = JSON.parse(editedText);
+
+      // Guarda los nuevos productos en AsyncStorage con la clave "productos"
+      await AsyncStorage.setItem('productos', JSON.stringify(nuevosProductos));
+
+      // Cierra el modal después de la actualización
+      setModalVisible(false);
+
+      // Muestra un mensaje de éxito o realiza otras acciones necesarias
+      Alert.alert("Actualización exitosa", "Los productos se han actualizado correctamente en AsyncStorage");
+    } catch (error) {
+      // Manejo de errores, por ejemplo, mostrar un mensaje de error
+      Alert.alert("Error", "Hubo un error al actualizar los productos. Por favor, inténtalo de nuevo.");
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Admin</Text>
@@ -53,14 +72,14 @@ const Main = ({ navigation }) => {
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#D2B4DE' }]}
+        style={[styles.button, { backgroundColor: '#F1948A' }]}
         onPress={borrarKeys}
       >
         <Text style={styles.buttonText}>Borrar Keys</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#F1948A' }]}
+        style={[styles.button, { backgroundColor: '#D2B4DE' }]}
         onPress={() => {
           productos();
           setModalVisible(true);
@@ -77,7 +96,15 @@ const Main = ({ navigation }) => {
             style={styles.textInput}
             multiline
             value={editedText}
+            onChangeText={(text) => setEditedText(text)}
           />
+
+          <TouchableOpacity
+            style={[styles.button, { marginTop: 10, backgroundColor: '#ABEBC6' }]}
+            onPress={actualizarProductos}
+          >
+            <Text style={styles.buttonText}>Actualizar</Text>
+          </TouchableOpacity>
 
           <TouchableOpacity
             style={[styles.button, { marginTop: 10 }]}

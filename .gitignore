@@ -33,3 +33,8 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# Data
+entries.json
+outputs.jso
+nP1.json
