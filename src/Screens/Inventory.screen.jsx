@@ -3,22 +3,16 @@ import { View, Text, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, A
 
 // FILTER
 import filter from 'lodash.filter';
-
 // API
 import { getProductos, agregarProducto } from '../Api/Products.api';
-
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
-
 // HOOKS
 import { useModal } from '../Hooks/modal';
-
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 // rneui/base
 import { Overlay, Button } from '@rneui/base';
-
 
 export default function Inventory({ navigation, route }) {
   const [productos, setProductos] = useState([]);
@@ -32,13 +26,7 @@ export default function Inventory({ navigation, route }) {
   const [cantNewProduct, setCantNewProduct] = useState(0);
 
   useEffect(() => {
-    if (pantallaAnterior === 'Incoming') {
-      setScreen('Incoming');
-    } else if (pantallaAnterior === 'Outcoming') {
-      setScreen('Outcoming');
-    } else {
-      setScreen('Main');
-    }
+    setScreen(pantallaAnterior);
   }, [pantallaAnterior, screen]);
 
   useEffect(() => {
@@ -220,22 +208,23 @@ export default function Inventory({ navigation, route }) {
       </Overlay>
 
       <View style={styles.buttonsContainer}>
-        {screen === 'Incoming' || screen === 'Outcoming' ? (//Incoming izq
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: screen === 'Incoming' ? 'green' : 'red' }]}
-            onPress={navigateToScreen}
+        <View style={styles.column}>
+          {screen === 'Incoming' || screen === 'Outcoming' ? (
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: screen === 'Incoming' ? 'green' : 'red' }]}
+              onPress={navigateToScreen}
+            >
+              <Icon name="cart-plus" size={20} color="white" />
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+            style={[styles.button, { backgroundColor: 'blue' }]}
+            onPress={show}
           >
-            <Icon name="cart-plus" size={30} color="white" />
+            <Icon name="plus" size={25} color="white" />
           </TouchableOpacity>
-        ) : null}
-
-        { }
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: 'blue' }]}
-          onPress={show}
-        >
-          <Icon name="plus" size={30} color="white" />
-        </TouchableOpacity>
+          )}
+        </View>
       </View>
     </View>
   );
@@ -243,7 +232,8 @@ export default function Inventory({ navigation, route }) {
 
 const styles = StyleSheet.create({
   productoContainer: {
-    paddingLeft: 30,
+    paddingLeft: 20,
+    paddingRight: 20,
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     flexDirection: 'row',
@@ -285,20 +275,23 @@ const styles = StyleSheet.create({
   selectedItem: {
     backgroundColor: '#B9B8F8',
   },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10,
+  },
   button: {
     borderRadius: 30,
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     marginLeft: 26,
     paddingVertical: 8,
     paddingHorizontal: 16,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonsContainer: {
-    position: 'absolute',
-    bottom: 16,
-    right: 16,
-    flexDirection: 'row',
-  },
+  column: {
+    flex: 1,
+    alignItems: 'center',
+  }
 });
