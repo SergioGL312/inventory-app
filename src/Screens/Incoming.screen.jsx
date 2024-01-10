@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
 
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -57,17 +57,24 @@ export default function Incoming({ navigation, route }) {
     }));
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Text>{item.nombre}</Text>
-      <TextInput
-        style={styles.quantityInput}
-        placeholder="Cantidad"
-        keyboardType="numeric"
-        onChangeText={(text) => updateQuantity(item.id_producto, text)}
-      />
-    </View>
-  );
+  const renderListItem = (item) => {
+
+    return (
+      <View key={item.id_producto} style={styles.itemContainer}>
+        <Text>{item.nombre}</Text>
+        <TextInput
+          style={styles.quantityInput}
+          placeholder="Cantidad"
+          keyboardType="numeric"
+          onChangeText={(text) => updateQuantity(item.id_producto, text)}
+        />
+      </View>
+    );
+  };
+
+  const renderList = () => {
+    return selectedItems.map((item) => renderListItem(item));
+  };
 
   const saveData = async () => {
     const entradaData = {
@@ -102,58 +109,53 @@ export default function Incoming({ navigation, route }) {
   };
 
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <HeaderIncomingAndOutcomingComponent
+        backgroundColor="#CBF8B8"
+        accion="compra"
+        currentDate={currentDate}
+        noDoc={noDoc}
+      />
 
-        <HeaderIncomingAndOutcomingComponent
-          backgroundColor="#CBF8B8"
-          accion="compra"
-          currentDate={currentDate}
-          noDoc={noDoc}
-        />
+      {selectedItems.length > 0 ? (
+        <ScrollView>
+          {renderList()}
+        </ScrollView>
+      ) : (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Text
+            style={{
+              fontSize: 20,
+              fontWeight: 'normal',
+              marginBottom: 20,
+              textAlign: 'center'
+            }}
+          >No has seleccionado ningun producto de compra</Text>
+        </View>
+      )}
 
-        {selectedItems.length > 0 ? (
-          <>
-            <FlatList
-              data={selectedItems}
-              keyExtractor={(item) => item.id_producto.toString()}
-              renderItem={renderItem}
-            />
-          </>
-        ) : (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: 'normal',
-                marginBottom: 20,
-                textAlign: 'center'
-              }}
-            >No has seleccionado ningun producto de compra</Text>
-          </View>
-        )}
-
-        <View style={styles.buttonsContainer}>
-          <View style={styles.column}>
-            {selectedItems.length > 0 ? (
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: isSaveButtonDisabled ? '#5DA965' : 'green' }]}
-                onPress={saveData}
-                disabled={isSaveButtonDisabled}
-              >
-                <Icon name="save" size={30} color="white" />
-              </TouchableOpacity>
-            ) : null}
-          </View>
-          <View style={styles.column}>
+      <View style={styles.buttonsContainer}>
+        <View style={styles.column}>
+          {selectedItems.length > 0 ? (
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: 'blue' }]}
-              onPress={navigateToProductsScreen}
+              style={[styles.button, { backgroundColor: isSaveButtonDisabled ? '#5DA965' : 'green' }]}
+              onPress={saveData}
+              disabled={isSaveButtonDisabled}
             >
-              <Icon name="shopping-cart" size={30} color="white" />
+              <Icon name="save" size={30} color="white" />
             </TouchableOpacity>
-          </View>
+          ) : null}
+        </View>
+        <View style={styles.column}>
+          <TouchableOpacity
+            style={[styles.button, { backgroundColor: 'blue' }]}
+            onPress={navigateToProductsScreen}
+          >
+            <Icon name="shopping-cart" size={30} color="white" />
+          </TouchableOpacity>
         </View>
       </View>
+    </View>
   );
 }
 

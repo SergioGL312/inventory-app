@@ -89,7 +89,6 @@ export default function Inventory({ navigation, route }) {
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.productoNombre}>{item.nombre}</Text>
-            <Text>{item.id_producto}</Text>
           </View>
           <View style={styles.stockActualContainer}>
             <Text style={{ fontWeight: '500', fontSize: 14 }}>{item.stock_actual}</Text>
@@ -130,23 +129,6 @@ export default function Inventory({ navigation, route }) {
       setSelectedItems((prevSelectedItems) => [...prevSelectedItems, { id_producto: item.id_producto, nombre: item.nombre, stock_actual: item.stock_actual }]);
     }
   };
-
-  // const toggleItemSelection = (item) => {
-  //   const isSelected = selectedItems.some((selectedItem) => selectedItem.id_producto === item.id_producto);
-  //   if (isSelected) {
-  //     setSelectedItems((prevSelectedItems) =>
-  //       prevSelectedItems.filter((selectedItem) => selectedItem.id_producto !== item.id_producto)
-  //     );
-  //   } else {
-  //     setTimeout(() => {
-  //       setSelectedItems((prevSelectedItems) => [
-  //         ...prevSelectedItems,
-  //         { id_producto: item.id_producto, nombre: item.nombre, stock_actual: item.stock_actual },
-  //       ]);
-  //     }, 0);
-  //   }
-  // };
-  
 
   const navigateToScreen = () => {
     if (screen === 'Incoming') {

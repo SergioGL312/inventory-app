@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
 
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -72,18 +72,25 @@ export default function Outcoming({ navigation, route }) {
 
   };
 
-  const renderItem = ({ item }) => (
-    <View style={styles.itemContainer}>
-      <Text style={{ color: quantityErrors[item.id_producto] ? 'red' : 'black' }}>{item.nombre}</Text>
-      <TextInput
-        style={[styles.quantityInput, { color: quantityErrors[item.id_producto] ? 'red' : 'black' }]}
-        placeholder="Cantidad"
-        keyboardType="numeric"
-        value={(quantities[item.id_producto] || '').toString()}
-        onChangeText={(text) => updateQuantity(item.id_producto, text, item.stock_actual, item.nombre)}
-      />
-    </View>
-  );
+  const renderListItem = (item) => {
+
+    return (
+      <View key={item.id_producto} style={styles.itemContainer}>
+        <Text style={{ color: quantityErrors[item.id_producto] ? 'red' : 'black' }}>{item.nombre}</Text>
+        <TextInput
+          style={[styles.quantityInput, { color: quantityErrors[item.id_producto] ? 'red' : 'black' }]}
+          placeholder="Cantidad"
+          keyboardType="numeric"
+          value={(quantities[item.id_producto] || '').toString()}
+          onChangeText={(text) => updateQuantity(item.id_producto, text, item.stock_actual, item.nombre)}
+        />
+      </View>
+    );
+  };
+
+  const renderList = () => {
+    return selectedItems.map((item) => renderListItem(item));
+  };
 
   const saveData = async () => {
     const salidaData = {
@@ -127,13 +134,9 @@ export default function Outcoming({ navigation, route }) {
       />
 
       {selectedItems.length > 0 ? (
-        <>
-          <FlatList
-            data={selectedItems}
-            keyExtractor={(item) => item.id_producto.toString()}
-            renderItem={renderItem}
-          />
-        </>
+        <ScrollView>
+          {renderList()}
+        </ScrollView>
       ) : (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text
