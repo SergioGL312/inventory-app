@@ -11,8 +11,9 @@ import { ROUTES } from '../Constants/navigation.constants';
 import { useModal } from '../Hooks/modal';
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
-// rneui/base
-import { Overlay, Button } from '@rneui/base';
+// COMPONENTS
+import SearchBarComponent from '../Components/SearchBarComponent';
+import NewProductOverlayComponent from '../Components/NewProductoOverlayComponent';
 
 export default function Inventory({ navigation, route }) {
   const [productos, setProductos] = useState([]);
@@ -39,6 +40,19 @@ export default function Inventory({ navigation, route }) {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    navigation.setOptions({
+      headerTitle: '',
+      headerRight: () => (
+        <SearchBarComponent 
+          searchQuery={searchQuery}
+          handleSearch={handleSearch}
+          clearSearch={clearSearch}
+        />
+      ),
+    });
+  }, [navigation, searchQuery]);
+
   const handleSearch = (query) => {
     setSearchQuery(query);
     const formattedQuery = query.toLowerCase();
@@ -54,29 +68,6 @@ export default function Inventory({ navigation, route }) {
     }
     return false;
   }
-
-  useEffect(() => {
-    navigation.setOptions({
-      headerTitle: '',
-      headerRight: () => (
-        <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.searchInput}
-            placeholder='Search'
-            clearButtonMode='always'
-            autoCorrect={false}
-            value={searchQuery}
-            onChangeText={(query) => handleSearch(query)}
-          />
-          {searchQuery !== '' && (
-            <TouchableOpacity onPress={clearSearch}>
-              <Text style={{ color: "#ccc" }}>x</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-      ),
-    });
-  }, [navigation, searchQuery]);
 
   const clearSearch = () => {
     setSearchQuery("");
@@ -110,7 +101,7 @@ export default function Inventory({ navigation, route }) {
         >
 
           <View>
-            <Image source={{ uri: 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
+            <Image source={{ uri: imagenUri }} style={styles.productoImagen} />
           </View>
           <View style={styles.textContainer}>
             <Text style={styles.productoNombre}>{item.nombre}</Text>
@@ -179,33 +170,14 @@ export default function Inventory({ navigation, route }) {
         extraData={selectedItems}
       />
 
-      <Overlay
-        overlayStyle={{ backgroundColor: 'white', width: '80%', padding: 20, height: '60%', justifyContent: 'center' }}
-        isVisible={visible}
-        onBackdropPress={hide}
-      >
-        <View>
-          <Text style={{ fontSize: 18, marginBottom: 10, fontWeight: 'bold' }}>Nuevo producto</Text>
-          <TextInput
-            style={{ borderColor: 'gray', borderWidth: 1, padding: 10, marginBottom: 20 }}
-            placeholder='Nombre nuevo producto'
-            onChangeText={onChangeTextNewProduct}
-          />
-          <TextInput
-            style={{ borderColor: 'gray', borderWidth: 1, padding: 10, marginBottom: 20 }}
-            placeholder="0"
-            keyboardType="numeric"
-            onChangeText={onChangeCantNewProduct}
-          />
-        </View>
-        <Button
-          color="#ECADAD"
-          title="Guardar"
-          onPress={saveNewProduct}
-          disabled={textNewProduct.trim() === ''}
-          style={{ marginTop: 20 }}
-        />
-      </Overlay>
+      <NewProductOverlayComponent 
+        visible={visible}
+        hide={hide}
+        onChangeTextNewProduct={onChangeTextNewProduct}
+        onChangeCantNewProduct={onChangeCantNewProduct}
+        saveNewProduct={saveNewProduct}
+        textNewProduct={textNewProduct}
+      />
 
       <View style={styles.buttonsContainer}>
         <View style={styles.column}>
@@ -240,6 +212,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 10,
   },
+  selectedItem: {
+    backgroundColor: '#B9B8F8',
+  },
   productoImagen: {
     width: 50,
     height: 50,
@@ -258,27 +233,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  searchInput: {
-    width: '100%',
-    marginRight: 15,
-    paddingHorizontal: 20,
-    paddingVertical: 5,
-    borderColor: "#ccc",
-    borderWidth: 1,
-    borderRadius: 8,
-  },
-  searchContainer: {
-    marginRight: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  selectedItem: {
-    backgroundColor: '#B9B8F8',
-  },
+  
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
     padding: 10,
+  },
+  column: {
+    flex: 1,
+    alignItems: 'center',
   },
   button: {
     borderRadius: 30,
@@ -290,8 +253,4 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  column: {
-    flex: 1,
-    alignItems: 'center',
-  }
 });
