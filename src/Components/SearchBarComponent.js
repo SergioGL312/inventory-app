@@ -13,8 +13,8 @@ export default function SearchBarComponent({ searchQuery, handleSearch, clearSea
         onChangeText={(query) => handleSearch(query)}
       />
       {searchQuery !== '' && (
-        <TouchableOpacity onPress={clearSearch}>
-          <Text style={{ color: "#ccc" }}>x</Text>
+        <TouchableOpacity onPress={clearSearch} style={{width: 20, justifyContent: 'center', alignItems: 'center'}}>
+          <Text style={{ color: "#ccc", fontSize: 30 }}>x</Text>
         </TouchableOpacity>
       )}
     </View>
