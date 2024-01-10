@@ -25,6 +25,8 @@ export default function Inventory({ navigation, route }) {
   const { visible, show, hide } = useModal();
   const [textNewProduct, setTextNewProduct] = useState("");
   const [cantNewProduct, setCantNewProduct] = useState(0);
+  const [updateCounter, setUpdateCounter] = useState(0);
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     setScreen(pantallaAnterior);
@@ -52,6 +54,10 @@ export default function Inventory({ navigation, route }) {
       ),
     });
   }, [navigation, searchQuery]);
+
+  useEffect(() => {
+    sortByNombre(sortOrder);
+  }, [sortOrder]);
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -158,11 +164,41 @@ export default function Inventory({ navigation, route }) {
     };
 
     agregarProducto(nuevoProducto);
-    Alert.alert('Guardado', 'Nuevo producto guardado correctamente');
+    Alert.alert('Guardado', 'Nuevo producto guardado correctamente',
+      [
+        {
+          text: 'Aceptar',
+          onPress: () => {
+            setUpdateCounter((prevCounter) => prevCounter + 1);
+            sortByNombre(sortOrder);
+          },
+        },
+      ],
+      { cancelable: false });
     setTextNewProduct('');
     hide();
     setProductos([...productos, nuevoProducto]);
   }
+
+  const sortByNombre = (order) => {
+    const sorted = [...productos].sort((a, b) => {
+      const nombreA = a.nombre.toUpperCase();
+      const nombreB = b.nombre.toUpperCase();
+      if (order === 'asc') {
+        return nombreA.localeCompare(nombreB);
+      } else {
+        return nombreB.localeCompare(nombreA);
+      }
+    });
+    setProductos(sorted);
+  };
+
+  const toggleSortOrder = () => {
+    const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
+    setSortOrder(newOrder);
+    Alert.alert('Ordenado', `Productos ordenados ${newOrder}endientemente`);
+    
+  };
 
   return (
     <View style={{ flex: 1 }}>
@@ -170,7 +206,7 @@ export default function Inventory({ navigation, route }) {
         data={productos}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => <RenderProducto item={item} imagenUri={'https://picsum.photos/200/200'} />}
-        extraData={{selectedItems, screen}}
+        extraData={{ selectedItems, screen, updateCounter }}
       />
 
       <NewProductOverlayComponent
@@ -183,25 +219,39 @@ export default function Inventory({ navigation, route }) {
       />
 
       <View style={styles.buttonsContainer}>
-        <View style={styles.column}>
-          {screen === 'Incoming' || screen === 'Outcoming' ? (
+
+        {screen === 'Incoming' || screen === 'Outcoming' ? (
+          <View style={styles.column}>
             <TouchableOpacity
               style={[styles.button, { backgroundColor: screen === 'Incoming' ? 'green' : 'red' }]}
               onPress={navigateToScreen}
             >
               <Icon name="cart-plus" size={20} color="white" />
             </TouchableOpacity>
-          ) : (
+          </View>
+        ) : null}
+        {screen === 'Main' ? (
+          <>
+            <View style={styles.column}>
             <TouchableOpacity
-              style={[styles.button, { backgroundColor: 'blue' }]}
-              onPress={show}
-            >
-              <Icon name="plus" size={25} color="white" />
-            </TouchableOpacity>
-          )}
-        </View>
+                style={styles.buttonSort}
+                onPress={() => toggleSortOrder()}
+              >
+                <Icon name={sortOrder === 'desc' ? "sort-alpha-asc" : "sort-alpha-desc"} size={25} color="black" />
+              </TouchableOpacity>
+            </View>
+            <View style={styles.column}>
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: 'blue' }]}
+                onPress={show}
+              >
+                <Icon name="plus" size={25} color="white" />
+              </TouchableOpacity>
+            </View>
+          </>
+        ) : null}
       </View>
-    </View>
+    </View >
   );
 }
 
@@ -255,4 +305,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  buttonSort: {
+    width: 60,
+    height: 50,
+    marginLeft: 26,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
