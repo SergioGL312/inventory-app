@@ -29,11 +29,20 @@ export default function Navigation() {
           name={ROUTES.inventory}
           component={Inventory}
         />
-        <Stack.Screen name={ROUTES.incoming} component={Incoming} />
-        <Stack.Screen name={ROUTES.outcoming} component={OutComing} />
+        <Stack.Screen
+          name={ROUTES.incoming}
+          component={Incoming}
+          options={{ title: 'Compras' }}
+        />
+        <Stack.Screen
+         name={ROUTES.outcoming}
+         component={OutComing}
+         options={{ title: 'Ventas' }}
+        />
         <Stack.Screen
           name={ROUTES.history}
           component={History}
+          options={{ title: 'Historial de movimientos' }}
         />
 
         <Stack.Screen name={ROUTES.admin} component={Admin} />

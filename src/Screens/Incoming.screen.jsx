@@ -3,12 +3,13 @@ import { View, Text, TouchableOpacity, StyleSheet, FlatList, TextInput, Alert } 
 
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
-
+// API
 import { editEntries, updateStock } from '../Api/AsyncStorage.api';
 import { getEntradas, editNewDocEntries } from '../Api/Entries.api';
+// COMPONENT
+import HeaderIncomingAndOutcomingComponent from '../Components/HeaderIncomingAndOutcomingComponent';
 
 export default function Incoming({ navigation, route }) {
   const [currentDate, setCurrentDate] = useState('');
@@ -89,7 +90,7 @@ export default function Incoming({ navigation, route }) {
 
     Alert.alert(
       'Guardado',
-      'Entradas guardadas correctamente.',
+      'Compra guardada correctamente.',
       [
         {
           text: 'Aceptar',
@@ -101,58 +102,58 @@ export default function Incoming({ navigation, route }) {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.infoIncommingContainer}>
-        <View style={[styles.dateContainer, { flex: 1 }]}>
-          <Text style={{ paddingBottom: 12, fontSize: 16 }}>Fecha entrada:</Text>
-          <Text style={{ borderBottomWidth: 1, width: "90%", color: "#616A6B" }}>{currentDate}</Text>
-        </View>
-        <View style={[styles.noInContainer, { flex: 1 }]}>
-          <Text style={{ paddingBottom: 12, fontSize: 16 }}>No. doc.</Text>
-          <Text style={{ borderBottomWidth: 1, width: "90%", color: "#616A6B" }}>{noDoc}</Text>
-        </View>
-      </View>
+      <View style={styles.container}>
 
-      {selectedItems.length > 0 ? (
-        <>
-          <FlatList
-            data={selectedItems}
-            keyExtractor={(item) => item.id_producto.toString()}
-            renderItem={renderItem}
-          />
-        </>
-      ) : (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text
-            style={{
-              fontSize: 20,
-              fontWeight: 'normal',
-              marginBottom: 20,
-              textAlign: 'center'
-            }}
-          >No has seleccionado ningun producto de entrada</Text>
-        </View>
-      )}
+        <HeaderIncomingAndOutcomingComponent
+          backgroundColor="#CBF8B8"
+          accion="compra"
+          currentDate={currentDate}
+          noDoc={noDoc}
+        />
 
-      <View style={styles.buttonsContainer}>
         {selectedItems.length > 0 ? (
-          <TouchableOpacity
-            style={[styles.button, { backgroundColor: isSaveButtonDisabled ? '#5DA965' : 'green' }]}
-            onPress={saveData}
-            disabled={isSaveButtonDisabled}
-          >
-            <Icon name="save" size={30} color="white" />
-          </TouchableOpacity>
-        ) : null}
+          <>
+            <FlatList
+              data={selectedItems}
+              keyExtractor={(item) => item.id_producto.toString()}
+              renderItem={renderItem}
+            />
+          </>
+        ) : (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'normal',
+                marginBottom: 20,
+                textAlign: 'center'
+              }}
+            >No has seleccionado ningun producto de compra</Text>
+          </View>
+        )}
 
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: 'blue' }]}
-          onPress={navigateToProductsScreen}
-        >
-          <Icon name="shopping-cart" size={30} color="white" />
-        </TouchableOpacity>
+        <View style={styles.buttonsContainer}>
+          <View style={styles.column}>
+            {selectedItems.length > 0 ? (
+              <TouchableOpacity
+                style={[styles.button, { backgroundColor: isSaveButtonDisabled ? '#5DA965' : 'green' }]}
+                onPress={saveData}
+                disabled={isSaveButtonDisabled}
+              >
+                <Icon name="save" size={30} color="white" />
+              </TouchableOpacity>
+            ) : null}
+          </View>
+          <View style={styles.column}>
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: 'blue' }]}
+              onPress={navigateToProductsScreen}
+            >
+              <Icon name="shopping-cart" size={30} color="white" />
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-    </View>
   );
 }
 
@@ -160,26 +161,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  infoIncommingContainer: {
-    flexDirection: 'row',
-    height: 96,
-    backgroundColor: "#CBF8B8",
-    // B9B8F8
-  },
-  dateContainer: {
-    justifyContent: 'center',
-    paddingLeft: 20
-
-  },
-  noInContainer: {
-    justifyContent: 'center',
-    paddingLeft: 20
-  },
   buttonsContainer: {
-    position: 'absolute',
-    bottom: 16,
-    right: 16,
     flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10,
+  },
+  column: {
+    flex: 1,
+    alignItems: 'center',
   },
   button: {
     borderRadius: 30,

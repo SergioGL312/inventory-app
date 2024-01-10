@@ -44,7 +44,7 @@ export default function Inventory({ navigation, route }) {
     navigation.setOptions({
       headerTitle: '',
       headerRight: () => (
-        <SearchBarComponent 
+        <SearchBarComponent
           searchQuery={searchQuery}
           handleSearch={handleSearch}
           clearSearch={clearSearch}
@@ -114,7 +114,11 @@ export default function Inventory({ navigation, route }) {
         </View>
       )}
     </>
-  ));
+  ), (prevProps, nextProps) => {
+    // Comparación de props para determinar si el componente debe volver a renderizarse
+    return prevProps.item.id_producto === nextProps.item.id_producto
+      && prevProps.imagenUri === nextProps.imagenUri;
+  });
 
   const toggleItemSelection = (item) => {
     const isSelected = selectedItems.some((selectedItem) => selectedItem.id_producto === item.id_producto);
@@ -126,6 +130,23 @@ export default function Inventory({ navigation, route }) {
       setSelectedItems((prevSelectedItems) => [...prevSelectedItems, { id_producto: item.id_producto, nombre: item.nombre, stock_actual: item.stock_actual }]);
     }
   };
+
+  // const toggleItemSelection = (item) => {
+  //   const isSelected = selectedItems.some((selectedItem) => selectedItem.id_producto === item.id_producto);
+  //   if (isSelected) {
+  //     setSelectedItems((prevSelectedItems) =>
+  //       prevSelectedItems.filter((selectedItem) => selectedItem.id_producto !== item.id_producto)
+  //     );
+  //   } else {
+  //     setTimeout(() => {
+  //       setSelectedItems((prevSelectedItems) => [
+  //         ...prevSelectedItems,
+  //         { id_producto: item.id_producto, nombre: item.nombre, stock_actual: item.stock_actual },
+  //       ]);
+  //     }, 0);
+  //   }
+  // };
+  
 
   const navigateToScreen = () => {
     if (screen === 'Incoming') {
@@ -167,10 +188,10 @@ export default function Inventory({ navigation, route }) {
         data={productos}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => <RenderProducto item={item} imagenUri={'https://picsum.photos/200/200'} />}
-        extraData={selectedItems}
+        extraData={{selectedItems, screen}}
       />
 
-      <NewProductOverlayComponent 
+      <NewProductOverlayComponent
         visible={visible}
         hide={hide}
         onChangeTextNewProduct={onChangeTextNewProduct}
@@ -190,11 +211,11 @@ export default function Inventory({ navigation, route }) {
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
-            style={[styles.button, { backgroundColor: 'blue' }]}
-            onPress={show}
-          >
-            <Icon name="plus" size={25} color="white" />
-          </TouchableOpacity>
+              style={[styles.button, { backgroundColor: 'blue' }]}
+              onPress={show}
+            >
+              <Icon name="plus" size={25} color="white" />
+            </TouchableOpacity>
           )}
         </View>
       </View>
@@ -233,7 +254,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  
   buttonsContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',

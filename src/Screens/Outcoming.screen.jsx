@@ -3,12 +3,13 @@ import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, Alert } 
 
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
-
+// API
 import { editOutputs, updateStock } from '../Api/AsyncStorage.api';
 import { editNewDocOutputs, getSalidas } from '../Api/Outputs.api';
+// COMPONENT
+import HeaderIncomingAndOutcomingComponent from '../Components/HeaderIncomingAndOutcomingComponent';
 
 export default function Outcoming({ navigation, route }) {
   const [currentDate, setCurrentDate] = useState('');
@@ -60,7 +61,7 @@ export default function Outcoming({ navigation, route }) {
       }));
       Alert.alert(
         'Error',
-        `La cantidad de salida de ${nombre_producto} es mayor que el stock actual.`,
+        `La cantidad de venta de ${nombre_producto} es mayor que el stock actual.`,
       );
     } else {
       setQuantityErrors((prevErrors) => ({
@@ -105,7 +106,7 @@ export default function Outcoming({ navigation, route }) {
 
     Alert.alert(
       'Guardado',
-      'Salidas guardadas correctamente.',
+      'Venta guardadas correctamente.',
       [
         {
           text: 'Aceptar',
@@ -118,16 +119,12 @@ export default function Outcoming({ navigation, route }) {
 
   return (
     <View style={styles.container}>
-      <View style={styles.infoIncommingContainer}>
-        <View style={[styles.dateContainer, { flex: 1 }]}>
-          <Text style={{ paddingBottom: 12, fontSize: 16 }}>Fecha salida:</Text>
-          <Text style={{ borderBottomWidth: 1, width: "90%", color: "#616A6B" }}>{currentDate}</Text>
-        </View>
-        <View style={[styles.noInContainer, { flex: 1 }]}>
-          <Text style={{ paddingBottom: 12, fontSize: 16 }}>No. doc.</Text>
-          <Text style={{ borderBottomWidth: 1, width: "90%", color: "#616A6B" }}>{noDoc}</Text>
-        </View>
-      </View>
+      <HeaderIncomingAndOutcomingComponent
+        backgroundColor="#F8B8B8"
+        accion="venta"
+        currentDate={currentDate}
+        noDoc={noDoc}
+      />
 
       {selectedItems.length > 0 ? (
         <>
@@ -146,27 +143,30 @@ export default function Outcoming({ navigation, route }) {
               marginBottom: 20,
               textAlign: 'center'
             }}
-          >No has seleccionado ningun producto de salida</Text>
+          >No has seleccionado ningun producto de venta</Text>
         </View>
       )}
 
       <View style={styles.buttonsContainer}>
-        {selectedItems.length > 0 ? (
+        <View style={styles.column}>
+          {selectedItems.length > 0 ? (
+            <TouchableOpacity
+              style={[styles.button, { backgroundColor: isSaveButtonDisabled ? '#5DA965' : 'green' }]}
+              onPress={saveData}
+              disabled={isSaveButtonDisabled}
+            >
+              <Icon name="save" size={30} color="white" />
+            </TouchableOpacity>
+          ) : null}
+        </View>
+        <View style={styles.column}>
           <TouchableOpacity
-            style={[styles.button, { backgroundColor: isSaveButtonDisabled ? '#5DA965' : 'green' }]}
-            onPress={saveData}
-            disabled={isSaveButtonDisabled}
+            style={[styles.button, { backgroundColor: 'blue' }]}
+            onPress={navigateToProductsScreen}
           >
-            <Icon name="save" size={30} color="white" />
+            <Icon name="shopping-cart" size={30} color="white" />
           </TouchableOpacity>
-        ) : null}
-
-        <TouchableOpacity
-          style={[styles.button, { backgroundColor: 'blue' }]}
-          onPress={navigateToProductsScreen}
-        >
-          <Icon name="shopping-cart" size={30} color="white" />
-        </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
@@ -176,25 +176,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  infoIncommingContainer: {
-    flexDirection: 'row',
-    height: 96,
-    backgroundColor: "#F8B8B8",
-  },
-  dateContainer: {
-    justifyContent: 'center',
-    paddingLeft: 20
-
-  },
-  noInContainer: {
-    justifyContent: 'center',
-    paddingLeft: 20
-  },
   buttonsContainer: {
-    position: 'absolute',
-    bottom: 16,
-    right: 16,
     flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10,
+  },
+  column: {
+    flex: 1,
+    alignItems: 'center',
   },
   button: {
     borderRadius: 30,
