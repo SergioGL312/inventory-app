@@ -8,7 +8,7 @@ const initEntradas = async () => {
   try {
     const entradas = await getData(entradasKey);
     if (!entradas || entradas.length === 0) {
-      const initialData = require('../Data/entries.json');
+      const initialData = require('../Data/E.json');
       await saveData(entradasKey, initialData.entradas);
       return initialData.entradas;
     }
