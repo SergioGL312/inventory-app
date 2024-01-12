@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // API
 import { guardarDatosEnArchivo, getProductos } from '../Api/Products.api';
+import { PRODUCTOS } from '../Api/db';
 
 const Main = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -61,61 +62,99 @@ const Main = ({ navigation }) => {
     }
   };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Admin</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={verKeys}
-      >
-        <Text style={styles.buttonText}>Ver Keys</Text>
-      </TouchableOpacity>
+  const subirDatosDBProductos = async () => {
+    const datosProductos = require('../Data/P1.json');
 
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#F1948A' }]}
-        onPress={borrarKeys}
-      >
-        <Text style={styles.buttonText}>Borrar Keys</Text>
-      </TouchableOpacity>
+    // almacenar por idDoc random
+    datosProductos.productos.forEach((producto) => {
+      PRODUCTOS.add(producto)
+        .then((docRef) => {
+          console.log('Producto agregado correctamente a Firestore con ID de documento:', docRef.id);
+        })
+        .catch((error) => {
+          console.error('Error al agregar producto a Firestore: ', error);
+        });
+    });
 
-      <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#D2B4DE' }]}
-        onPress={() => {
-          productos();
-          setModalVisible(true);
-        }}
-      >
-        <Text style={styles.buttonText}>Mostrar Productos</Text>
-      </TouchableOpacity>
+    // almacenar por idDoc id_producto
+    // datosProductos.productos.forEach((producto) => {
+    //   const { id_producto, ...restoDatos } = producto;
+  
+    //   // Utiliza el id_producto como ID del documento
+    //   const productoDocument = PRODUCTOS.doc(id_producto.toString());
+  
+    //   productoDocument.set(restoDatos)
+    //     .then(() => {
+    //       console.log('Producto agregado correctamente a Firestore con ID de documento:', id_producto);
+    //     })
+    //     .catch((error) => {
+    //       console.error('Error al agregar producto a Firestore: ', error);
+    //     });
+    // });
+}
 
-      <Modal visible={modalVisible} animationType="slide">
-        <View style={styles.modalContainer}>
-          <Text style={styles.title}>Productos:</Text>
+return (
+  <View style={styles.container}>
+    <Text style={styles.title}>Admin</Text>
+    <TouchableOpacity
+      style={styles.button}
+      onPress={verKeys}
+    >
+      <Text style={styles.buttonText}>Ver Keys</Text>
+    </TouchableOpacity>
 
-          <TextInput
-            style={styles.textInput}
-            multiline
-            value={editedText}
-            onChangeText={(text) => setEditedText(text)}
-          />
+    <TouchableOpacity
+      style={[styles.button, { backgroundColor: '#D2B4DE' }]}
+      onPress={() => {
+        productos();
+        setModalVisible(true);
+      }}
+    >
+      <Text style={styles.buttonText}>Mostrar Productos</Text>
+    </TouchableOpacity>
 
-          <TouchableOpacity
-            style={[styles.button, { marginTop: 10, backgroundColor: '#ABEBC6' }]}
-            onPress={actualizarProductos}
-          >
-            <Text style={styles.buttonText}>Actualizar</Text>
-          </TouchableOpacity>
+    {/* <TouchableOpacity
+      style={[styles.button, { backgroundColor: '#ABEBC6' }]}
+      onPress={subirDatosDBProductos}
+    >
+      <Text style={styles.buttonText}>Importar a db</Text>
+    </TouchableOpacity> */}
 
-          <TouchableOpacity
-            style={[styles.button, { marginTop: 10 }]}
-            onPress={() => setModalVisible(false)}
-          >
-            <Text style={styles.buttonText}>Cerrar</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
-    </View>
-  );
+    <TouchableOpacity
+      style={[styles.button, { backgroundColor: '#F1948A' }]}
+      onPress={borrarKeys}
+    >
+      <Text style={styles.buttonText}>Borrar Keys</Text>
+    </TouchableOpacity>
+
+    <Modal visible={modalVisible} animationType="slide">
+      <View style={styles.modalContainer}>
+        <Text style={styles.title}>Productos:</Text>
+
+        <TextInput
+          style={styles.textInput}
+          multiline
+          value={editedText}
+          onChangeText={(text) => setEditedText(text)}
+        />
+
+        <TouchableOpacity
+          style={[styles.button, { marginTop: 10, backgroundColor: '#ABEBC6' }]}
+          onPress={actualizarProductos}
+        >
+          <Text style={styles.buttonText}>Actualizar</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[styles.button, { marginTop: 10 }]}
+          onPress={() => setModalVisible(false)}
+        >
+          <Text style={styles.buttonText}>Cerrar</Text>
+        </TouchableOpacity>
+      </View>
+    </Modal>
+  </View>
+);
 };
 
 const styles = StyleSheet.create({
@@ -136,6 +175,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     marginBottom: 10,
+    width: 250,
   },
   buttonText: {
     fontSize: 18,

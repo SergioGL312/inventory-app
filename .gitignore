@@ -38,3 +38,6 @@ yarn-error.*
 entries.json
 outputs.jso
 nP1.json
+
+# Env variables
+.env
