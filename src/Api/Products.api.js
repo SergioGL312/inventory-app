@@ -50,7 +50,6 @@ export const getLastIDProductos = async () => {
 export const addNewProduct = async (datos) => {
   try {
     await DB_PRODUCTOS.add(datos);
-    console.log('Producto agregado correctamente.');
     return { success: true, message: 'Nuevo producto agregado correctamente.' };
   } catch (error) {
     console.error("Error al agregar el nuevo producto:", error);
@@ -60,14 +59,11 @@ export const addNewProduct = async (datos) => {
 
 // Acutializar nombre o  stock producto
 export const updateProducto = async (id, nuevosDatos) => {
-  console.log(`${id} Nuevos: datos ${nuevosDatos}`);
   try {
     await DB_PRODUCTOS.doc(id).update(nuevosDatos);
-    console.log('Documento actualizado correctamente en Firestore');
   } catch (error) {
     console.error('Error al actualizar el documento en Firestore: ', error);
   }
-  console.log("Guardado exitoso");
 }
 
 export const editEntriesProductos = async (id, cant) => {

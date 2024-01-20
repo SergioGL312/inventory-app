@@ -54,7 +54,6 @@ export const getLastIDEntradas = async () => {
 export const addNewEntrada = async (datos) => {
   try {
     await DB_ENTRADAS.add(datos);
-    console.log('Entrada agregada correctamente.');
     return { success: true, message: 'Compra agregada correctamente.' };
   } catch (error) {
     console.error("Error al agregar la entrada:", error);

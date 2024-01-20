@@ -182,7 +182,6 @@ export default function Inventory({ navigation, route }) {
   );
 }
 
-
 const styles = StyleSheet.create({
   selectedItem: {
     backgroundColor: '#B9B8F8',

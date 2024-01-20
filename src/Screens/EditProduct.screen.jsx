@@ -12,7 +12,6 @@ export default function EditProduct({ navigation, route }) {
 
   const handleSave = async () => {
     const stockValue = editedStockActual.trim() === '' ? 0 : parseInt(editedStockActual, 10);
-    console.log("Guardar cambios:", editedNombre, stockValue);
     await updateProducto(id, {
       nombre: editedNombre,
       stock_actual: stockValue,

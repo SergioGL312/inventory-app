@@ -12,11 +12,9 @@ const Main = ({ navigation }) => {
 
   const verKeys = async () => {
     const keys = await AsyncStorage.getAllKeys();
-    console.log(`Keys: ${keys}`);
     if (keys.length > 0) {
       for (const key of keys) {
         const value = await AsyncStorage.getItem(key);
-        console.log(value);
       }
       const response = await guardarDatosEnArchivo("Productos", 'json');
       Alert.alert(
@@ -24,17 +22,14 @@ const Main = ({ navigation }) => {
         response
       );
     } else {
-      console.log(`There isn't ${keys.length}`);
     }
   };
 
   async function borrarKeys() {
-    console.log("Deleted");
     await AsyncStorage.clear();
   }
 
   const productos = async () => {
-    console.log("func vacia");
   };
 
   const actualizarProductos = async () => {

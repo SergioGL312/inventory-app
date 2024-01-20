@@ -54,7 +54,6 @@ export const getLastIDSalidas = async () => {
 export const addNewSalida = async (datos) => {
   try {
     await DB_SALIDAS.add(datos);
-    console.log('Salida agregada correctamente.');
     return { success: true, message: 'Venta agregada correctamente.' };
   } catch (error) {
     console.error("Error al agregar la salida:", error);

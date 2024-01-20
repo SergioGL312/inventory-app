@@ -1,8 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-
-export default function InventarioComponent({ screen, navigation, route, productos, selectedItems, toggleItemSelection }) {
+const InventarioComponent = memo(({ screen, navigation, route, productos, selectedItems, toggleItemSelection }) => {
 
   const renderItem = ({ item }) => {
     return (
@@ -57,7 +56,7 @@ export default function InventarioComponent({ screen, navigation, route, product
       renderItem={renderItem}
     />
   );
-}
+});
 
 const styles = StyleSheet.create({
   productoContainer: {
@@ -91,3 +90,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default InventarioComponent;
