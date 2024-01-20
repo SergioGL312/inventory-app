@@ -12,6 +12,7 @@ import Incoming from "../Screens/Incoming.screen";
 import OutComing from "../Screens/Outcoming.screen";
 import History from "../Screens/History.screen";
 import Admin from "../Screens/Admin.screen";
+import EditProduct from "../Screens/EditProduct.screen";
 
 // Navigation
 const Stack = createStackNavigator();
@@ -44,8 +45,8 @@ export default function Navigation() {
           component={History}
           options={{ title: 'Historial de movimientos' }}
         />
-
         <Stack.Screen name={ROUTES.admin} component={Admin} />
+        <Stack.Screen name={ROUTES.editProduct.name} component={EditProduct} />
       </Stack.Navigator>
     </NavigationContainer>
   );

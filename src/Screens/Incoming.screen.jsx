@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, TextInput, Alert, ScrollView, ActivityIndicator } from 'react-native';
 
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 // API
-import { editEntries, updateStock } from '../Api/AsyncStorage.api';
-import { getEntradas, editNewDocEntries } from '../Api/Entries.api';
+import { editEntriesProductos, updateStock } from '../Api/Products.api';
+import { getLastIDEntradas, addNewEntrada } from '../Api/Entries.api';
 // COMPONENT
 import HeaderIncomingAndOutcomingComponent from '../Components/HeaderIncomingAndOutcomingComponent';
 
@@ -17,6 +17,7 @@ export default function Incoming({ navigation, route }) {
   const [quantities, setQuantities] = useState({});
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
   const [noDoc, setNoDoc] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     return () => {
@@ -26,19 +27,19 @@ export default function Incoming({ navigation, route }) {
   }, []);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const entradas = await getEntradas();
-      const size = Object.keys(entradas).length + 1;
-      setNoDoc(size);
-    }
-
-    fetchData();
-  }, []);
-
-  useEffect(() => {
     const date = new Date();
     const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     setCurrentDate(formattedDate);
+
+    const fetchIDEntrada = async () => {
+      try {
+        const size = await getLastIDEntradas();
+        setNoDoc(size);
+      } catch (error) {
+        console.error('Error al obtener el último ID de entradas:', error);
+      }
+    }
+    fetchIDEntrada();
   }, []);
 
   const navigateToProductsScreen = () => {
@@ -58,7 +59,6 @@ export default function Incoming({ navigation, route }) {
   };
 
   const renderListItem = (item) => {
-
     return (
       <View key={item.id_producto} style={styles.itemContainer}>
         <Text>{item.nombre}</Text>
@@ -77,35 +77,57 @@ export default function Incoming({ navigation, route }) {
   };
 
   const saveData = async () => {
-    const entradaData = {
-      id_entrada: noDoc,
-      productos: selectedItems.map((item) => ({
-        id_producto: item.id_producto,
-        nombre_producto: item.nombre,
-        cantidad: quantities[item.id_producto] || 0,
-      })),
-      fecha: currentDate
-    };
+    setIsSaveButtonDisabled(!isSaveButtonDisabled);
+    setIsLoading(true);
+    try {
+      const entradaData = {
+        id_entrada: noDoc,
+        productos: selectedItems.map((item) => ({
+          id_producto: item.id_producto,
+          nombre_producto: item.nombre,
+          cantidad: quantities[item.id_producto] || 0,
+        })),
+        fecha: currentDate,
+      };
 
-    editNewDocEntries(entradaData);
+      const result = await addNewEntrada(entradaData);
+      if (result.success) {
+        for (const item of selectedItems) {
+          const cant = quantities[item.id_producto] || 0;
 
-    for (const item of selectedItems) {
-      const cant = quantities[item.id_producto] || 0;
-      await editEntries('productos', item.id_producto, cant);
-      await updateStock('productos', item.id_producto, cant, true);
+          try {
+            const editEntriesResult = await editEntriesProductos(item.id_producto, cant);
+            const updateStockResult = await updateStock(item.id_producto, cant, true);
+
+            if (!editEntriesResult.success || !updateStockResult.success) {
+              throw new Error(`Error al editar entradas o actualizar stock.`);
+            }
+          } catch (error) {
+            console.error('Error al editar entradas o actualizar stock:', error);
+            throw new Error('Error al editar entradas o actualizar stock.');
+          }
+        }
+        Alert.alert(
+          'Guardado',
+          result.message,
+          [
+            {
+              text: 'Aceptar',
+              onPress: () => navigation.navigate(ROUTES.main),
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        Alert.alert('Error', result.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'Hubo un error al guardar la compra.');
+    } finally {
+      setIsLoading(false);
+      setIsSaveButtonDisabled(false);
     }
-
-    Alert.alert(
-      'Guardado',
-      'Compra guardada correctamente.',
-      [
-        {
-          text: 'Aceptar',
-          onPress: () => navigation.navigate(ROUTES.main),
-        },
-      ],
-      { cancelable: false }
-    );
   };
 
   return (
@@ -117,11 +139,7 @@ export default function Incoming({ navigation, route }) {
         noDoc={noDoc}
       />
 
-      {selectedItems.length > 0 ? (
-        <ScrollView>
-          {renderList()}
-        </ScrollView>
-      ) : (
+      {isLoading && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text
             style={{
@@ -130,7 +148,28 @@ export default function Incoming({ navigation, route }) {
               marginBottom: 20,
               textAlign: 'center'
             }}
-          >No has seleccionado ningun producto de compra</Text>
+          >Guardando</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
+
+      {!isLoading && selectedItems.length > 0 ? (
+        <ScrollView>
+          {renderList()}
+        </ScrollView>
+      ) : (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {!isLoading && (
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'normal',
+                marginBottom: 20,
+                textAlign: 'center'
+              }}
+            >No has seleccionado ningun producto de compra</Text>
+          )}
+
         </View>
       )}
 
@@ -176,7 +215,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: 60,
     height: 60,
-    marginLeft: 26,
     paddingVertical: 8,
     paddingHorizontal: 16,
     justifyContent: 'center',

@@ -1,26 +1,19 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Text, SafeAreaView, StatusBar, FlatList, StyleSheet } from "react-native";
+import React, { useState} from "react";
+import { View, Text, SafeAreaView, StatusBar, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 
 // API
 import { getEntradas } from "../Api/Entries.api";
 
 export default function EntriesHistory() {
-  const [data, setData] = useState([]);
+  const { entradas, loading, refetch } = getEntradas();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        console.log(`13: data ${data}`);
-        const result = await getEntradas();
-        console.log(`15: result ${result}`);
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size={"large"} color={"#5500dc"} />
+      </View>
+    )
+  }
 
   const renderItem = ({ item }) => (
     <View style={styles.container}>
@@ -57,10 +50,10 @@ export default function EntriesHistory() {
           width: '100%',
           flex: 1,
         }}>
-          {data.length > 0 ? (
+          {entradas.length > 0 ? (
             <>
               <FlatList
-                data={data}
+                data={entradas}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id_entrada.toString()}
               />

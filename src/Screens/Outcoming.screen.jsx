@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, ActivityIndicator } from 'react-native';
 
 // ICONS
 import Icon from 'react-native-vector-icons/FontAwesome';
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 // API
-import { editOutputs, updateStock } from '../Api/AsyncStorage.api';
-import { editNewDocOutputs, getSalidas } from '../Api/Outputs.api';
+import { editOutputsProductos, updateStock } from '../Api/Products.api';
+import { getLastIDSalidas, addNewSalida } from '../Api/Outputs.api';
 // COMPONENT
 import HeaderIncomingAndOutcomingComponent from '../Components/HeaderIncomingAndOutcomingComponent';
 
@@ -18,21 +18,29 @@ export default function Outcoming({ navigation, route }) {
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
   const [noDoc, setNoDoc] = useState(0);
   const [quantityErrors, setQuantityErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const salidas = await getSalidas();
-      const size = Object.keys(salidas).length + 1;
-      setNoDoc(size);
-    }
-
-    fetchData();
+    return () => {
+      setQuantities({});
+      setIsSaveButtonDisabled(true);
+    };
   }, []);
 
   useEffect(() => {
     const date = new Date();
     const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
     setCurrentDate(formattedDate);
+
+    const fetchIDSalida = async () => {
+      try {
+        const size = await getLastIDSalidas();
+        setNoDoc(size);
+      } catch (error) {
+        console.error('Error al obtener el último ID de salidas:', error);
+      }
+    }
+    fetchIDSalida();
   }, []);
 
   const navigateToProductsScreen = () => {
@@ -73,7 +81,6 @@ export default function Outcoming({ navigation, route }) {
   };
 
   const renderListItem = (item) => {
-
     return (
       <View key={item.id_producto} style={styles.itemContainer}>
         <Text style={{ color: quantityErrors[item.id_producto] ? 'red' : 'black' }}>{item.nombre}</Text>
@@ -93,35 +100,57 @@ export default function Outcoming({ navigation, route }) {
   };
 
   const saveData = async () => {
-    const salidaData = {
-      id_salida: noDoc,
-      productos: selectedItems.map((item) => ({
-        id_producto: item.id_producto,
-        nombre_producto: item.nombre,
-        cantidad: quantities[item.id_producto] || 0,
-      })),
-      fecha: currentDate
-    };
+    setIsSaveButtonDisabled(!isSaveButtonDisabled);
+    setIsLoading(true);
+    try {
+      const salidaData = {
+        id_salida: noDoc,
+        productos: selectedItems.map((item) => ({
+          id_producto: item.id_producto,
+          nombre_producto: item.nombre,
+          cantidad: quantities[item.id_producto] || 0,
+        })),
+        fecha: currentDate
+      };
 
-    editNewDocOutputs(salidaData);
+      const result = await addNewSalida(salidaData);
+      if (result.success) {
+        for (const item of selectedItems) {
+          const cant = quantities[item.id_producto] || 0;
 
-    for (const item of selectedItems) {
-      const cant = quantities[item.id_producto] || 0;
-      await editOutputs('productos', item.id_producto, cant);
-      await updateStock('productos', item.id_producto, cant, false);
+          try {
+            const editOutputsResult = await editOutputsProductos(item.id_producto, cant);
+            const updateStockResult = await updateStock(item.id_producto, cant, false);
+
+            if (!editOutputsResult.success || !updateStockResult.success) {
+              throw new Error(`Error al editar entradas o actualizar stock.`);
+            }
+          } catch (error) {
+            console.error('Error al editar entradas o actualizar stock:', error);
+            throw new Error('Error al editar entradas o actualizar stock.');
+          }
+        }
+        Alert.alert(
+          'Guardado',
+          result.message,
+          [
+            {
+              text: 'Aceptar',
+              onPress: () => navigation.navigate(ROUTES.main),
+            },
+          ],
+          { cancelable: false }
+        );
+      } else {
+        Alert.alert('Error', result.message);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      Alert.alert('Error', 'Hubo un error al guardar la compra.');
+    } finally {
+      setIsLoading(false);
+      setIsSaveButtonDisabled(false);
     }
-
-    Alert.alert(
-      'Guardado',
-      'Venta guardadas correctamente.',
-      [
-        {
-          text: 'Aceptar',
-          onPress: () => navigation.navigate(ROUTES.main),
-        },
-      ],
-      { cancelable: false }
-    );
   };
 
   return (
@@ -133,11 +162,7 @@ export default function Outcoming({ navigation, route }) {
         noDoc={noDoc}
       />
 
-      {selectedItems.length > 0 ? (
-        <ScrollView>
-          {renderList()}
-        </ScrollView>
-      ) : (
+      {isLoading && (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Text
             style={{
@@ -146,7 +171,28 @@ export default function Outcoming({ navigation, route }) {
               marginBottom: 20,
               textAlign: 'center'
             }}
-          >No has seleccionado ningun producto de venta</Text>
+          >Guardando</Text>
+          <ActivityIndicator size="large" color="#0000ff" />
+        </View>
+      )}
+
+      {!isLoading && selectedItems.length > 0 ? (
+        <ScrollView>
+          {renderList()}
+        </ScrollView>
+      ) : (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          {!isLoading && (
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: 'normal',
+                marginBottom: 20,
+                textAlign: 'center'
+              }}
+            >No has seleccionado ningun producto de venta</Text>
+          )}
+
         </View>
       )}
 

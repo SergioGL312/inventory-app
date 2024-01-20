@@ -3,9 +3,6 @@ import { View, Text, TouchableOpacity, Alert, Modal, TextInput, StyleSheet } fro
 
 // ASYNC
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-// API
-import { guardarDatosEnArchivo, getProductos } from '../Api/Products.api';
 import { PRODUCTOS } from '../Api/db';
 
 const Main = ({ navigation }) => {
@@ -37,10 +34,7 @@ const Main = ({ navigation }) => {
   }
 
   const productos = async () => {
-    const result = await getProductos();
-    console.log(result);
-    setProductosData(result);
-    setEditedText(JSON.stringify(result, null, 2));
+    console.log("func vacia");
   };
 
   const actualizarProductos = async () => {
@@ -63,7 +57,7 @@ const Main = ({ navigation }) => {
   };
 
   const subirDatosDBProductos = async () => {
-    const datosProductos = require('../Data/P1.json');
+    const datosProductos = require('../Data/P1 copy.json');
 
     // almacenar por idDoc random
     datosProductos.productos.forEach((producto) => {
@@ -79,8 +73,6 @@ const Main = ({ navigation }) => {
     // almacenar por idDoc id_producto
     // datosProductos.productos.forEach((producto) => {
     //   const { id_producto, ...restoDatos } = producto;
-  
-    //   // Utiliza el id_producto como ID del documento
     //   const productoDocument = PRODUCTOS.doc(id_producto.toString());
   
     //   productoDocument.set(restoDatos)
@@ -113,12 +105,12 @@ return (
       <Text style={styles.buttonText}>Mostrar Productos</Text>
     </TouchableOpacity>
 
-    {/* <TouchableOpacity
+    <TouchableOpacity
       style={[styles.button, { backgroundColor: '#ABEBC6' }]}
       onPress={subirDatosDBProductos}
     >
       <Text style={styles.buttonText}>Importar a db</Text>
-    </TouchableOpacity> */}
+    </TouchableOpacity>
 
     <TouchableOpacity
       style={[styles.button, { backgroundColor: '#F1948A' }]}

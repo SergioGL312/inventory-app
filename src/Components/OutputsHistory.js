@@ -1,24 +1,19 @@
-import React, { useEffect, useState, useRef } from "react";
-import { View, Text, SafeAreaView, StatusBar, FlatList, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Text, SafeAreaView, StatusBar, FlatList, StyleSheet, ActivityIndicator } from "react-native";
 
 // API
 import { getSalidas } from "../Api/Outputs.api";
 
 export default function OutputsHistory() {
-  const [data, setData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getSalidas();
-        setData(result);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { salidas, loading, refetch } = getSalidas();
+  
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size={"large"} color={"#5500dc"} />
+      </View>
+    )
+  }
 
   const renderItem = ({ item }) => (
     <View style={styles.container}>
@@ -55,10 +50,10 @@ export default function OutputsHistory() {
           width: '100%',
           flex: 1,
         }}>
-          {data.length > 0 ? (
+          {salidas.length > 0 ? (
             <>
               <FlatList
-                data={data}
+                data={salidas}
                 renderItem={renderItem}
                 keyExtractor={(item) => item.id_salida.toString()}
               />

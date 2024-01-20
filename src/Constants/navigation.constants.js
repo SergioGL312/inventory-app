@@ -4,5 +4,9 @@ export const ROUTES = {
     incoming: 'Incoming',
     outcoming: 'Outcoming',
     history: 'History',
-    admin: 'Admin'
+    admin: 'Admin',
+    editProduct: {
+        name: 'EditProduct',
+        params: (id) => ({ id }),
+    }
 }

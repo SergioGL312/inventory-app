@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Image, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 'react-native';
 
 // FILTER
 import filter from 'lodash.filter';
 // API
-import { getProductos, agregarProducto } from '../Api/Products.api';
+import { addNewProduct, getLastIDProductos, getProductos } from '../Api/Products.api';
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 // HOOKS
@@ -14,33 +14,28 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 // COMPONENTS
 import SearchBarComponent from '../Components/SearchBarComponent';
 import NewProductOverlayComponent from '../Components/NewProductoOverlayComponent';
+import InventarioComponent from '../Components/InventarioComponent';
 
 export default function Inventory({ navigation, route }) {
-  const [productos, setProductos] = useState([]);
-  const [fullData, setFullData] = useState([]);
-  const [searchQuery, setSearchQuery] = useState("");
+  const { pantallaAnterior } = route.params || {};
+  const { productos, loading, refetch } = getProductos();
   const [screen, setScreen] = useState('');
-  const { pantallaAnterior } = route.params;
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const { visible, show, hide } = useModal();
   const [textNewProduct, setTextNewProduct] = useState("");
   const [cantNewProduct, setCantNewProduct] = useState(0);
-  const [updateCounter, setUpdateCounter] = useState(0);
-  const [sortOrder, setSortOrder] = useState('asc');
+  const [selectedItems, setSelectedItems] = useState([]);
+
 
   useEffect(() => {
     setScreen(pantallaAnterior);
-  }, [pantallaAnterior, screen]);
+  }, [pantallaAnterior]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const productosData = await getProductos();
-      setProductos(productosData);
-      setFullData(productosData);
-    };
-
-    fetchData();
-  }, []);
+  useEffect(() => { // cuando venga de edit se actualiza el flatlist
+    if (route.params.recargar) {
+      refetch();
+    }
+  }, [route.params]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -48,82 +43,76 @@ export default function Inventory({ navigation, route }) {
       headerRight: () => (
         <SearchBarComponent
           searchQuery={searchQuery}
-          handleSearch={handleSearch}
-          clearSearch={clearSearch}
+          onChangeText={(text) => setSearchQuery(text)}
+          clearSearch={() => setSearchQuery("")}
         />
       ),
     });
-  }, [navigation, searchQuery]);
+  }, [searchQuery]);
 
-  useEffect(() => {
-    sortByNombre(sortOrder);
-  }, [sortOrder]);
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    const formattedQuery = query.toLowerCase();
-    const filteredData = filter(fullData, (product) => {
-      return contains(product, formattedQuery);
-    });
-    setProductos(filteredData);
+  if (loading) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size={"large"} color={"#5500dc"} />
+      </View>
+    )
   }
 
-  const contains = (product, query) => {
-    if (product.nombre.toLowerCase().includes(query)) {
-      return true;
+  const filteredProductos = filter(productos, (producto) =>
+    producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const onChangeTextNewProduct = (text) => {
+    setTextNewProduct(text);
+  }
+
+  const onChangeCantNewProduct = (text) => {
+    const newCant = text !== '' ? parseInt(text) : 0;
+    setCantNewProduct(newCant);
+  }
+
+  const saveNewProduct = async () => {
+    try {
+      const lastId = await getLastIDProductos();
+
+      const nuevoProducto = {
+        id_producto: lastId,
+        nombre: textNewProduct,
+        stock_inicial: 0,
+        entradas: 0,
+        salidas: 0,
+        stock_actual: cantNewProduct,
+      };
+
+      addNewProduct(nuevoProducto)
+        .then((result) => {
+          if (result.success) {
+            Alert.alert('Guardado', result.message, [
+              {
+                text: 'Aceptar',
+                onPress: () => {
+                  setTextNewProduct('');
+                  setCantNewProduct(0);
+                  refetch();
+                },
+              },
+            ]);
+          } else {
+            Alert.alert('Error', result.message);
+          }
+        })
+        .catch((error) => {
+          console.error('Error al llamar a addNewProduct:', error);
+          Alert.alert('Error', result.message);
+        });
+
+      hide();
+      setTextNewProduct('');
+      setCantNewProduct(0);
+    } catch (error) {
+      console.error('Error al obtener el último ID de productos:', error);
     }
-    return false;
   }
-
-  const clearSearch = () => {
-    setSearchQuery("");
-    setProductos(fullData);
-  };
-
-  const RenderProducto = React.memo(({ item, imagenUri }) => (
-    <>
-      {screen === 'Incoming' || screen === 'Outcoming' ? (
-        <TouchableOpacity
-          style={[
-            styles.productoContainer,
-            selectedItems.find((selectedItem) => selectedItem.id_producto === item.id_producto) && styles.selectedItem,
-          ]}
-          onPress={() => toggleItemSelection(item)}
-        >
-          <View>
-            <Image source={{ uri: imagenUri }} style={styles.productoImagen} />
-          </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.productoNombre}>{item.nombre}</Text>
-          </View>
-          <View style={styles.stockActualContainer}>
-            <Text style={{ fontWeight: '500', fontSize: 14 }}>{item.stock_actual}</Text>
-          </View>
-        </TouchableOpacity>
-      ) : (
-        <View
-          style={styles.productoContainer}
-        >
-
-          <View>
-            <Image source={{ uri: imagenUri }} style={styles.productoImagen} />
-          </View>
-          <View style={styles.textContainer}>
-            <Text style={styles.productoNombre}>{item.nombre}</Text>
-          </View>
-
-
-          <View style={styles.stockActualContainer}>
-            <Text style={{ fontWeight: '500', fontSize: 14 }}>{item.stock_actual}</Text>
-          </View>
-        </View>
-      )}
-    </>
-  ), (prevProps, nextProps) => {
-    // Comparación de props para determinar si el componente debe volver a renderizarse
-    return prevProps.item.id_producto === nextProps.item.id_producto
-      && prevProps.imagenUri === nextProps.imagenUri;
-  });
 
   const toggleItemSelection = (item) => {
     const isSelected = selectedItems.some((selectedItem) => selectedItem.id_producto === item.id_producto);
@@ -144,69 +133,16 @@ export default function Inventory({ navigation, route }) {
     }
   }
 
-  const onChangeTextNewProduct = (text) => {
-    setTextNewProduct(text);
-  }
-
-  const onChangeCantNewProduct = (text) => {
-    const newCant = text !== '' ? parseInt(text) : 0;
-    setCantNewProduct(newCant);
-  }
-
-  const saveNewProduct = () => {
-    const nuevoProducto = {
-      id_producto: productos.length + 1,
-      nombre: textNewProduct,
-      stock_inicial: 0,
-      entradas: 0,
-      salidas: 0,
-      stock_actual: cantNewProduct,
-    };
-
-    agregarProducto(nuevoProducto);
-    Alert.alert('Guardado', 'Nuevo producto guardado correctamente',
-      [
-        {
-          text: 'Aceptar',
-          onPress: () => {
-            setUpdateCounter((prevCounter) => prevCounter + 1);
-            sortByNombre(sortOrder);
-          },
-        },
-      ],
-      { cancelable: false });
-    setTextNewProduct('');
-    hide();
-    setProductos([...productos, nuevoProducto]);
-  }
-
-  const sortByNombre = (order) => {
-    const sorted = [...productos].sort((a, b) => {
-      const nombreA = a.nombre.toUpperCase();
-      const nombreB = b.nombre.toUpperCase();
-      if (order === 'asc') {
-        return nombreA.localeCompare(nombreB);
-      } else {
-        return nombreB.localeCompare(nombreA);
-      }
-    });
-    setProductos(sorted);
-  };
-
-  const toggleSortOrder = () => {
-    const newOrder = sortOrder === 'asc' ? 'desc' : 'asc';
-    setSortOrder(newOrder);
-    Alert.alert('Ordenado', `Productos ordenados ${newOrder}endientemente`);
-    
-  };
-
   return (
     <View style={{ flex: 1 }}>
-      <FlatList
-        data={productos}
-        keyExtractor={(item, index) => index.toString()}
-        renderItem={({ item }) => <RenderProducto item={item} imagenUri={'https://picsum.photos/200/200'} />}
-        extraData={{ selectedItems, screen, updateCounter }}
+
+      <InventarioComponent
+        screen={screen}
+        navigation={navigation}
+        route={ROUTES.editProduct.name}
+        productos={filteredProductos}
+        selectedItems={selectedItems}
+        toggleItemSelection={toggleItemSelection}
       />
 
       <NewProductOverlayComponent
@@ -230,61 +166,26 @@ export default function Inventory({ navigation, route }) {
             </TouchableOpacity>
           </View>
         ) : null}
-        {screen === 'Main' ? (
-          <>
-            <View style={styles.column}>
+
+        {((screen === 'Main') || (screen === 'Edit')) ? (
+          <View style={styles.column}>
             <TouchableOpacity
-                style={styles.buttonSort}
-                onPress={() => toggleSortOrder()}
-              >
-                <Icon name={sortOrder === 'desc' ? "sort-alpha-asc" : "sort-alpha-desc"} size={25} color="black" />
-              </TouchableOpacity>
-            </View>
-            <View style={styles.column}>
-              <TouchableOpacity
-                style={[styles.button, { backgroundColor: 'blue' }]}
-                onPress={show}
-              >
-                <Icon name="plus" size={25} color="white" />
-              </TouchableOpacity>
-            </View>
-          </>
+              style={[styles.button, { backgroundColor: 'blue' }]}
+              onPress={show}
+            >
+              <Icon name="plus" size={25} color="white" />
+            </TouchableOpacity>
+          </View>
         ) : null}
       </View>
-    </View >
+    </View>
   );
 }
 
+
 const styles = StyleSheet.create({
-  productoContainer: {
-    paddingLeft: 20,
-    paddingRight: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-  },
   selectedItem: {
     backgroundColor: '#B9B8F8',
-  },
-  productoImagen: {
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-  },
-  textContainer: {
-    flex: 1,
-    paddingLeft: 16,
-  },
-  productoNombre: {
-    fontSize: 17,
-    fontWeight: '600',
-  },
-  stockActualContainer: {
-    width: 60,
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   buttonsContainer: {
     flexDirection: 'row',
@@ -299,16 +200,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     width: 50,
     height: 50,
-    marginLeft: 26,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonSort: {
-    width: 60,
-    height: 50,
-    marginLeft: 26,
     paddingVertical: 8,
     paddingHorizontal: 16,
     justifyContent: 'center',

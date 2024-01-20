@@ -1,20 +1,20 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
 
-export default function SearchBarComponent({ searchQuery, handleSearch, clearSearch }) {
+export default function SearchBarComponent({ searchQuery, onChangeText, clearSearch }) {
   return (
     <View style={styles.searchContainer}>
       <TextInput
         style={styles.searchInput}
-        placeholder='Search'
+        placeholder='Buscar productos...'
         clearButtonMode='always'
         autoCorrect={false}
         value={searchQuery}
-        onChangeText={(query) => handleSearch(query)}
+        onChangeText={onChangeText}
       />
       {searchQuery !== '' && (
-        <TouchableOpacity onPress={clearSearch} style={{width: 20, justifyContent: 'center', alignItems: 'center'}}>
-          <Text style={{ color: "#ccc", fontSize: 30 }}>x</Text>
+        <TouchableOpacity onPress={clearSearch} style={{ width: 20, justifyContent: 'center', alignItems: 'center' }}>
+          <Text>X</Text>
         </TouchableOpacity>
       )}
     </View>
