@@ -168,3 +168,33 @@ export const updateStock = async (idProducto, cant, isEntrada) => {
     return { success: false, message: 'Error al actualizar el campo.' };
   }
 }
+
+export const eliminarProductoPorID = async (idDoc) => {
+  try {
+    const documento = await DB_PRODUCTOS.doc(idDoc).get();
+    if (documento.exists) {
+      await DB_PRODUCTOS.doc(idDoc).delete();
+      console.log(`Producto con ID ${idDoc} eliminado correctamente.`);
+    } else {
+      console.log(`No se encontró un producto con ID ${idDoc}.`);
+    }
+  } catch (error) {
+    console.error('Error al eliminar productos:', error.message);
+  }
+};
+
+export const borrarTodosProductos = async () => {
+  try {
+    const querySnapshot = await DB_PRODUCTOS.get();
+
+    // Elimina cada documento
+    querySnapshot.forEach(async (doc) => {
+      await DB_PRODUCTOS.doc(doc.id).delete();
+      console.log(`Documento con ID ${doc.id} eliminado correctamente.`);
+    });
+
+    console.log('Todos los documentos eliminados correctamente.');
+  } catch (error) {
+    console.error('Error al eliminar documentos:', error.message);
+  }
+};

@@ -1,9 +1,21 @@
 import React, { memo } from "react";
-import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, Image, StyleSheet, TouchableOpacity, Alert } from 'react-native';
 
-const InventarioComponent = memo(({ screen, navigation, route, productos, selectedItems, toggleItemSelection }) => {
+const InventarioComponent = memo(({ screen, navigation, route, productos, selectedItems, toggleItemSelection, handleEliminarProducto }) => {
 
   const renderItem = ({ item }) => {
+    const handleLongPress = () => {
+      Alert.alert(
+        'Eliminar producto',
+        '¿Estás seguro de que deseas eliminar este producto?',
+        [
+          { text: 'Cancelar', style: 'cancel' },
+          { text: 'Eliminar', onPress: () => handleEliminarProducto(item) },
+        ],
+        { cancelable: true }
+      );
+    };
+
     return (
       <>
         {screen === 'Incoming' || screen === 'Outcoming' ? (
@@ -28,6 +40,7 @@ const InventarioComponent = memo(({ screen, navigation, route, productos, select
           <TouchableOpacity
             onPress={() => navigation.navigate(route, { producto: item })}
             style={styles.productoContainer}
+            onLongPress={handleLongPress}
           >
 
             <View>

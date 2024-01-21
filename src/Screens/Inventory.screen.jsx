@@ -4,7 +4,7 @@ import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 're
 // FILTER
 import filter from 'lodash.filter';
 // API
-import { addNewProduct, getLastIDProductos, getProductos } from '../Api/Products.api';
+import { addNewProduct, getLastIDProductos, getProductos, eliminarProductoPorID } from '../Api/Products.api';
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 // HOOKS
@@ -25,7 +25,8 @@ export default function Inventory({ navigation, route }) {
   const [textNewProduct, setTextNewProduct] = useState("");
   const [cantNewProduct, setCantNewProduct] = useState(0);
   const [selectedItems, setSelectedItems] = useState([]);
-
+  const [isLoadingAddNewP, setIsLoadingAddNewP] = useState(false);
+  const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   useEffect(() => {
     setScreen(pantallaAnterior);
@@ -50,13 +51,13 @@ export default function Inventory({ navigation, route }) {
     });
   }, [searchQuery]);
 
-  if (loading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size={"large"} color={"#5500dc"} />
-      </View>
-    )
-  }
+  // if (loading || isLoadingAddNewP || isLoadingDelete) {
+  //   return (
+  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+  //       <ActivityIndicator size={"large"} color={"#5500dc"} />
+  //     </View>
+  //   )
+  // }
 
   const filteredProductos = filter(productos, (producto) =>
     producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
@@ -72,13 +73,13 @@ export default function Inventory({ navigation, route }) {
   }
 
   const saveNewProduct = async () => {
+    setIsLoadingAddNewP(true);
     try {
       const lastId = await getLastIDProductos();
 
       const nuevoProducto = {
         id_producto: lastId,
         nombre: textNewProduct,
-        stock_inicial: 0,
         entradas: 0,
         salidas: 0,
         stock_actual: cantNewProduct,
@@ -87,13 +88,14 @@ export default function Inventory({ navigation, route }) {
       addNewProduct(nuevoProducto)
         .then((result) => {
           if (result.success) {
+            refetch();
             Alert.alert('Guardado', result.message, [
               {
                 text: 'Aceptar',
                 onPress: () => {
                   setTextNewProduct('');
                   setCantNewProduct(0);
-                  refetch();
+                  setIsLoadingAddNewP(false);
                 },
               },
             ]);
@@ -112,6 +114,9 @@ export default function Inventory({ navigation, route }) {
     } catch (error) {
       console.error('Error al obtener el último ID de productos:', error);
     }
+    //  finally {
+    //   setIsLoadingAddNewP(false);
+    // }
   }
 
   const toggleItemSelection = (item) => {
@@ -133,6 +138,36 @@ export default function Inventory({ navigation, route }) {
     }
   }
 
+  const handleEliminarProducto = (product) => {
+    setIsLoadingDelete(true);
+    try {
+      eliminarProductoPorID(product.id)
+        .then(() => {
+          refetch();
+          Alert.alert('Exitoso', `El producto ${product.nombre} fue borrado exitosamente.`, [{
+            text: 'Aceptar',
+                onPress: () => {
+                  setIsLoadingDelete(false);
+                },
+          }]);
+          console.log('Eliminando producto:', product);
+        });
+    } catch (error) {
+      console.error('Error al borrar el producto:', error);
+    } 
+    // finally {
+    //   setIsLoadingDelete(false);
+    // }
+  };
+
+  if (loading || isLoadingAddNewP || isLoadingDelete) {
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <ActivityIndicator size={"large"} color={"#5500dc"} />
+      </View>
+    )
+  }
+
   return (
     <View style={{ flex: 1 }}>
 
@@ -143,6 +178,7 @@ export default function Inventory({ navigation, route }) {
         productos={filteredProductos}
         selectedItems={selectedItems}
         toggleItemSelection={toggleItemSelection}
+        handleEliminarProducto={handleEliminarProducto}
       />
 
       <NewProductOverlayComponent

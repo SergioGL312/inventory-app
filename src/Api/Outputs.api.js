@@ -60,3 +60,20 @@ export const addNewSalida = async (datos) => {
     return { success: false, message: 'Error al agregar la salida.' };
   }
 }
+
+export const borrarTodasSalidas = async () => {
+  try {
+    // Obtén todos los documentos de la colección
+    const querySnapshot = await DB_SALIDAS.get();
+
+    // Elimina cada documento
+    querySnapshot.forEach(async (doc) => {
+      await DB_SALIDAS.doc(doc.id).delete();
+      console.log(`Documento con ID ${doc.id} eliminado correctamente.`);
+    });
+
+    console.log('Todos los documentos eliminados correctamente.');
+  } catch (error) {
+    console.error('Error al eliminar documentos:', error.message);
+  }
+};

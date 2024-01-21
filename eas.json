@@ -11,9 +11,26 @@
       "distribution": "internal",
       "android": {
         "buildType": "apk"
+      },
+      "env": {
+        "FIREBASE_API_KEY": "AIzaSyCccvuVYLDdgyiggFhBk_D234kBXUmAg3I",
+        "FIREBASE_AUTH_DOMAIN": "inventory-app-171ee.firebaseapp.com",
+        "FIREBASE_PROJECT_ID": "inventory-app-171ee",
+        "FIREBASE_STORAGE_BUCKET": "inventory-app-171ee.appspot.com",
+        "FIREBASE_MESSAGING_SENDER_ID": "442384734877",
+        "FIREBASE_APP_ID": "1:442384734877:web:5cb5fd81624b60ed2a5274"
       }
     },
-    "production": {}
+    "production": {
+      "env": {
+        "FIREBASE_API_KEY": "AIzaSyCccvuVYLDdgyiggFhBk_D234kBXUmAg3I",
+        "FIREBASE_AUTH_DOMAIN": "inventory-app-171ee.firebaseapp.com",
+        "FIREBASE_PROJECT_ID": "inventory-app-171ee",
+        "FIREBASE_STORAGE_BUCKET": "inventory-app-171ee.appspot.com",
+        "FIREBASE_MESSAGING_SENDER_ID": "442384734877",
+        "FIREBASE_APP_ID": "1:442384734877:web:5cb5fd81624b60ed2a5274"
+      }
+    }
   },
   "submit": {
     "production": {}
