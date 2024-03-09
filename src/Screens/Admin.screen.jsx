@@ -1,85 +1,78 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // ASYNC
-import { borrarTodosProductos } from '../Api/Products.api';
+import { resetEntradasProductos } from '../Api/Products.api';
 import { borrarTodasSalidas } from '../Api/Outputs.api';
 import { borrarTodasEntradas } from '../Api/Entries.api';
-import { PRODUCTOS } from '../Api/db';
 
 const Main = () => {
 
   async function borrarProductos() {
-    borrarTodosProductos();
+    await AsyncStorage.clear();
+    // borrarTodosProductos();
   }
 
   async function borrarEntradas() {
     borrarTodasEntradas();
+    try {
+      await AsyncStorage.removeItem('cachedEntradas');
+      console.log(`Se ha eliminado correctamente el valor asociado a la clave 'cachedEntradas'.`);
+    } catch (error) {
+      console.error(`Error al eliminar el valor asociado a la clave 'cachedEntradas':`, error);
+    }
   }
 
   async function borrarSalidas() {
     borrarTodasSalidas();
+    try {
+      await AsyncStorage.removeItem('cachedOutputs');
+      console.log(`Se ha eliminado correctamente el valor asociado a la clave 'cachedOutputs'.`);
+    } catch (error) {
+      console.error(`Error al eliminar el valor asociado a la clave 'cachedOutputs':`, error);
+    }
   }
 
-  const subirDatosDBProductos = async () => {
-    console.log("Hecho");
-    // const datosProductos = require('../Data/P1.json');
-
-    // // almacenar por idDoc random
-    // datosProductos.productos.forEach((producto) => {
-    //   PRODUCTOS.add(producto)
-    //     .then((docRef) => {
-    //       console.log('Producto agregado correctamente a Firestore con ID de documento:', docRef.id);
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error al agregar producto a Firestore: ', error);
-    //     });
-    // });
-
-    // almacenar por idDoc id_producto
-    // datosProductos.productos.forEach((producto) => {
-    //   const { id_producto, ...restoDatos } = producto;
-    //   const productoDocument = PRODUCTOS.doc(id_producto.toString());
-
-    //   productoDocument.set(restoDatos)
-    //     .then(() => {
-    //       console.log('Producto agregado correctamente a Firestore con ID de documento:', id_producto);
-    //     })
-    //     .catch((error) => {
-    //       console.error('Error al agregar producto a Firestore: ', error);
-    //     });
-    // });
+  const resetearEntradasProductos = async () => {
+    resetEntradasProductos()
+      .then((result) => {
+        console.log(result.message);
+      })
+      .catch((error) => {
+        console.error('Error:', error);
+      });
   }
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Admin</Text>
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#ABEBC6' }]}
-        onPress={subirDatosDBProductos}
+        style={[styles.button, { backgroundColor: '#AED6F1' }]}
+        onPress={resetearEntradasProductos}
       >
-        <Text style={styles.buttonText}>Importar a db</Text>
+        <Text style={styles.buttonText}>Resetear entradas y salidas de Doc Productos</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: '#F1948A' }]}
         onPress={borrarProductos}
       >
-        <Text style={styles.buttonText}>Borrar Productos</Text>
+        <Text style={styles.buttonText}>Borrar Cache</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
-        style={[styles.button, { backgroundColor: '#F1948A' }]}
+        style={[styles.button, { backgroundColor: '#E74C3C' }]}
         onPress={borrarEntradas}
       >
-        <Text style={styles.buttonText}>Borrar Entradas</Text>
+        <Text style={styles.buttonText}>Borrar Doc de Entradas</Text>
       </TouchableOpacity>
 
       <TouchableOpacity
         style={[styles.button, { backgroundColor: '#D2B4DE' }]}
         onPress={borrarSalidas}
       >
-        <Text style={styles.buttonText}>Borrar Salidas</Text>
+        <Text style={styles.buttonText}>Borrar Doc de Salidas</Text>
       </TouchableOpacity>
 
     </View>

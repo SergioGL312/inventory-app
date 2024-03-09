@@ -1,6 +1,7 @@
 // productos.js
 import { useEffect, useState } from "react";
 import { PRODUCTOS as DB_PRODUCTOS, FIREBASE_DB } from "../Api/db";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const getProductos = () => {
   const [productos, setProductos] = useState([]);
@@ -8,14 +9,21 @@ export const getProductos = () => {
 
   const fetchData = async () => {
     try {
-      const snapshot = await DB_PRODUCTOS.get();
-      const nuevosProductos = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      nuevosProductos.sort((a, b) => a.nombre.localeCompare(b.nombre));
-      setProductos(nuevosProductos);
-      setLoading(false);
+      const cachedData = await AsyncStorage.getItem('cachedProductos');
+      if (cachedData !== null) {
+        setProductos(JSON.parse(cachedData));
+        setLoading(false);
+      } else {
+        const snapshot = await DB_PRODUCTOS.get();
+        const nuevosProductos = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        nuevosProductos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        setProductos(nuevosProductos);
+        await AsyncStorage.setItem('cachedProductos', JSON.stringify(nuevosProductos));
+        setLoading(false);
+      }
     } catch (error) {
       console.error('Error al cargar datos desde Firestore: ', error);
       setLoading(false);
@@ -26,8 +34,22 @@ export const getProductos = () => {
     fetchData();
   }, []);
 
-  const refetch = () => {
-    fetchData();
+  const refetch = async () => {
+    try {
+      setLoading(true);
+      const snapshot = await DB_PRODUCTOS.get();
+      const nuevosProductos = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      nuevosProductos.sort((a, b) => a.nombre.localeCompare(b.nombre));
+      setProductos(nuevosProductos);
+      await AsyncStorage.setItem('cachedProductos', JSON.stringify(nuevosProductos));
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al realizar el refetch desde Firestore: ', error);
+      setLoading(false);
+    }
   };
 
   return { productos, loading, refetch };
@@ -196,5 +218,29 @@ export const borrarTodosProductos = async () => {
     console.log('Todos los documentos eliminados correctamente.');
   } catch (error) {
     console.error('Error al eliminar documentos:', error.message);
+  }
+};
+
+export const resetEntradasProductos = async () => {
+  try {
+    const result = await FIREBASE_DB.runTransaction(async (transaction) => {
+      const querySnapshot = await DB_PRODUCTOS.get();
+
+      if (querySnapshot.empty) {
+        return { success: false, message: 'No se encontraron productos.' };
+      }
+
+      querySnapshot.forEach((doc) => {
+        const docRef = doc.ref;
+        transaction.update(docRef, { entradas: 0, salidas: 0 });
+      });
+
+      return { success: true, message: 'Todos los productos han sido actualizados a 0 entradas.' };
+    });
+
+    return result;
+  } catch (error) {
+    console.error('Error al actualizar los campos:', error);
+    return { success: false, message: 'Error al actualizar los campos.' };
   }
 };

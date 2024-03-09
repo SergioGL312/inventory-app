@@ -1,6 +1,7 @@
 // Salidas.js
 import { useState, useEffect } from "react";
 import { SALIDAS as DB_SALIDAS } from "../Api/db";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const getSalidas = () => {
   const [salidas, setSalidas] = useState([]);
@@ -8,13 +9,20 @@ export const getSalidas = () => {
 
   const fetchData = async () => {
     try {
-      const snapshot = await DB_SALIDAS.orderBy('id_salida', 'asc').get();
-      const nuevasSalidas = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setSalidas(nuevasSalidas);
-      setLoading(false);
+      const cachedData = await AsyncStorage.getItem('cachedOutputs');
+      if (cachedData !== null) {
+        setSalidas(JSON.parse(cachedData));
+        setLoading(false);
+      } else {
+        const snapshot = await DB_SALIDAS.orderBy('id_salida', 'asc').get();
+        const nuevasSalidas = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setSalidas(nuevasSalidas);
+        await AsyncStorage.setItem('cachedOutputs', JSON.stringify(nuevasSalidas));
+        setLoading(false);
+      }
     } catch (error) {
       console.error('Error al cargar datos desde Firestore: ', error);
       setLoading(false);
@@ -25,8 +33,22 @@ export const getSalidas = () => {
     fetchData();
   }, []);
 
-  const refetch = () => {
-    fetchData();
+  const refetch = async () => {
+    try {
+      setLoading(true);
+      const snapshot = await DB_SALIDAS.orderBy('id_salida', 'asc').get();
+      const nuevasSalidas = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setSalidas(nuevasSalidas);
+      await AsyncStorage.setItem('cachedOutputs', JSON.stringify(nuevasSalidas));
+      setLoading(false);
+    } catch (error) {
+      console.error('Error al realizar el refetch desde Firestore: ', error);
+      setLoading(false);
+    }
+
   };
 
   return { salidas: salidas, loading, refetch };
@@ -51,9 +73,10 @@ export const getLastIDSalidas = async () => {
 }
 
 // Agregar Nuevo Producto
-export const addNewSalida = async (datos) => {
+export const addNewSalida = async (datos, refetchCallback) => {
   try {
     await DB_SALIDAS.add(datos);
+    await refetchCallback();
     return { success: true, message: 'Venta agregada correctamente.' };
   } catch (error) {
     console.error("Error al agregar la salida:", error);

@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { ROUTES } from '../Constants/navigation.constants';
 // API
 import { editEntriesProductos, updateStock } from '../Api/Products.api';
-import { getLastIDEntradas, addNewEntrada } from '../Api/Entries.api';
+import { getEntradas, getLastIDEntradas, addNewEntrada } from '../Api/Entries.api';
 // COMPONENT
 import HeaderIncomingAndOutcomingComponent from '../Components/HeaderIncomingAndOutcomingComponent';
 
@@ -18,6 +18,7 @@ export default function Incoming({ navigation, route }) {
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
   const [noDoc, setNoDoc] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const { refetch } = getEntradas();
 
   useEffect(() => {
     return () => {
@@ -90,7 +91,7 @@ export default function Incoming({ navigation, route }) {
         fecha: currentDate,
       };
 
-      const result = await addNewEntrada(entradaData);
+      const result = await addNewEntrada(entradaData, refetch);
       if (result.success) {
         for (const item of selectedItems) {
           const cant = quantities[item.id_producto] || 0;
@@ -113,7 +114,7 @@ export default function Incoming({ navigation, route }) {
           [
             {
               text: 'Aceptar',
-              onPress: () => navigation.navigate(ROUTES.main),
+              onPress: () => navigation.navigate(ROUTES.inventory, { recargar: true, pantallaAnterior: "Incoming2" }),
             },
           ],
           { cancelable: false }

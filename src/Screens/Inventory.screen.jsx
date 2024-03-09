@@ -10,7 +10,8 @@ import { ROUTES } from '../Constants/navigation.constants';
 // HOOKS
 import { useModal } from '../Hooks/modal';
 // ICONS
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { useFonts } from 'expo-font';
+import { FontAwesome } from '@expo/vector-icons';
 // COMPONENTS
 import SearchBarComponent from '../Components/SearchBarComponent';
 import NewProductOverlayComponent from '../Components/NewProductoOverlayComponent';
@@ -29,10 +30,14 @@ export default function Inventory({ navigation, route }) {
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
 
   useEffect(() => {
-    setScreen(pantallaAnterior);
-  }, [pantallaAnterior]);
+    if (pantallaAnterior === 'Incoming2' || pantallaAnterior === 'Outcoming2' ) {
+      navigation.navigate('Main');
+    } else {
+      setScreen(pantallaAnterior);
+    }
+  }, [pantallaAnterior, navigation]);
 
-  useEffect(() => { // cuando venga de edit se actualiza el flatlist
+  useEffect(() => {
     if (route.params.recargar) {
       refetch();
     }
@@ -51,13 +56,13 @@ export default function Inventory({ navigation, route }) {
     });
   }, [searchQuery]);
 
-  // if (loading || isLoadingAddNewP || isLoadingDelete) {
-  //   return (
-  //     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-  //       <ActivityIndicator size={"large"} color={"#5500dc"} />
-  //     </View>
-  //   )
-  // }
+  const [loaded] = useFonts({
+    FontAwesome: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf'),
+  });
+  
+  if (!loaded) {
+    return <ActivityIndicator />;
+  }
 
   const filteredProductos = filter(productos, (producto) =>
     producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
@@ -114,9 +119,6 @@ export default function Inventory({ navigation, route }) {
     } catch (error) {
       console.error('Error al obtener el último ID de productos:', error);
     }
-    //  finally {
-    //   setIsLoadingAddNewP(false);
-    // }
   }
 
   const toggleItemSelection = (item) => {
@@ -146,18 +148,15 @@ export default function Inventory({ navigation, route }) {
           refetch();
           Alert.alert('Exitoso', `El producto ${product.nombre} fue borrado exitosamente.`, [{
             text: 'Aceptar',
-                onPress: () => {
-                  setIsLoadingDelete(false);
-                },
+            onPress: () => {
+              setIsLoadingDelete(false);
+            },
           }]);
           console.log('Eliminando producto:', product);
         });
     } catch (error) {
       console.error('Error al borrar el producto:', error);
-    } 
-    // finally {
-    //   setIsLoadingDelete(false);
-    // }
+    }
   };
 
   if (loading || isLoadingAddNewP || isLoadingDelete) {
@@ -192,24 +191,24 @@ export default function Inventory({ navigation, route }) {
 
       <View style={styles.buttonsContainer}>
 
-        {screen === 'Incoming' || screen === 'Outcoming' ? (
+        {((screen === 'Incoming' || screen === 'Outcoming') && !loading) ? (
           <View style={styles.column}>
             <TouchableOpacity
               style={[styles.button, { backgroundColor: screen === 'Incoming' ? 'green' : 'red' }]}
               onPress={navigateToScreen}
             >
-              <Icon name="cart-plus" size={20} color="white" />
+              <FontAwesome name="cart-plus" size={20} color="white" />
             </TouchableOpacity>
           </View>
         ) : null}
 
-        {((screen === 'Main') || (screen === 'Edit')) ? (
+        {((screen === 'Main') || (screen === 'Edit') && !loading) ? (
           <View style={styles.column}>
             <TouchableOpacity
               style={[styles.button, { backgroundColor: 'blue' }]}
               onPress={show}
             >
-              <Icon name="plus" size={25} color="white" />
+              <FontAwesome name="plus" size={25} color="white" />
             </TouchableOpacity>
           </View>
         ) : null}

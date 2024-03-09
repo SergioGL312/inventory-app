@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, TextInput, Alert, ActivityIndicator } from 'react-native';
 
 // ICONS
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { useFonts } from 'expo-font';
+import { FontAwesome } from '@expo/vector-icons';
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 // API
 import { editOutputsProductos, updateStock } from '../Api/Products.api';
-import { getLastIDSalidas, addNewSalida } from '../Api/Outputs.api';
+import { getSalidas, getLastIDSalidas, addNewSalida } from '../Api/Outputs.api';
 // COMPONENT
 import HeaderIncomingAndOutcomingComponent from '../Components/HeaderIncomingAndOutcomingComponent';
 
@@ -19,6 +20,7 @@ export default function Outcoming({ navigation, route }) {
   const [noDoc, setNoDoc] = useState(0);
   const [quantityErrors, setQuantityErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const { refetch } = getSalidas();
 
   useEffect(() => {
     return () => {
@@ -43,10 +45,6 @@ export default function Outcoming({ navigation, route }) {
     fetchIDSalida();
   }, []);
 
-  const navigateToProductsScreen = () => {
-    navigation.navigate(ROUTES.inventory, { pantallaAnterior: 'Outcoming' });
-  }
-
   useEffect(() => {
     const areAllQuantitiesFilled = selectedItems.every((item) =>
       quantities[item.id_producto] !== undefined &&
@@ -56,6 +54,18 @@ export default function Outcoming({ navigation, route }) {
 
     setIsSaveButtonDisabled(!areAllQuantitiesFilled); // true - negado false
   }, [quantities, selectedItems]);
+
+  const [loaded] = useFonts({
+    FontAwesome: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf'),
+  });
+
+  if (!loaded) {
+    return <ActivityIndicator />;
+  }
+
+  const navigateToProductsScreen = () => {
+    navigation.navigate(ROUTES.inventory, { pantallaAnterior: 'Outcoming' });
+  }
 
   const updateQuantity = (productId, quantity, stock_actual, nombre_producto) => {
     setQuantities((prevQuantities) => ({
@@ -113,7 +123,7 @@ export default function Outcoming({ navigation, route }) {
         fecha: currentDate
       };
 
-      const result = await addNewSalida(salidaData);
+      const result = await addNewSalida(salidaData, refetch);
       if (result.success) {
         for (const item of selectedItems) {
           const cant = quantities[item.id_producto] || 0;
@@ -136,7 +146,7 @@ export default function Outcoming({ navigation, route }) {
           [
             {
               text: 'Aceptar',
-              onPress: () => navigation.navigate(ROUTES.main),
+              onPress: () => navigation.navigate(ROUTES.inventory, { recargar: true, pantallaAnterior: "Outcoming2" }),
             },
           ],
           { cancelable: false }
@@ -204,7 +214,8 @@ export default function Outcoming({ navigation, route }) {
               onPress={saveData}
               disabled={isSaveButtonDisabled}
             >
-              <Icon name="save" size={30} color="white" />
+              <FontAwesome name="save" size={30} color="white" />
+
             </TouchableOpacity>
           ) : null}
         </View>
@@ -213,7 +224,8 @@ export default function Outcoming({ navigation, route }) {
             style={[styles.button, { backgroundColor: 'blue' }]}
             onPress={navigateToProductsScreen}
           >
-            <Icon name="shopping-cart" size={30} color="white" />
+            <FontAwesome name="shopping-cart" size={30} color="white" />
+
           </TouchableOpacity>
         </View>
       </View>

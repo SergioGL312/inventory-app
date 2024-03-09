@@ -1,6 +1,8 @@
 // Entradas.js
 import { useState, useEffect } from "react";
 import { ENTRADAS as DB_ENTRADAS } from "../Api/db";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 export const getEntradas = () => {
   const [entradas, setEntradas] = useState([]);
@@ -8,13 +10,20 @@ export const getEntradas = () => {
 
   const fetchData = async () => {
     try {
-      const snapshot = await DB_ENTRADAS.orderBy('id_entrada', 'asc').get();
-      const nuevasEntradas = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data()
-      }));
-      setEntradas(nuevasEntradas);
-      setLoading(false);
+      const cachedData = await AsyncStorage.getItem('cachedEntradas');
+      if (cachedData !== null) {
+        setEntradas(JSON.parse(cachedData));
+        setLoading(false);
+      } else {
+        const snapshot = await DB_ENTRADAS.orderBy('id_entrada', 'asc').get();
+        const nuevasEntradas = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setEntradas(nuevasEntradas);
+        await AsyncStorage.setItem('cachedEntradas', JSON.stringify(nuevasEntradas));
+        setLoading(false);
+      }
     } catch (error) {
       console.error('Error al cargar datos desde Firestore: ', error);
       setLoading(false);
@@ -25,8 +34,22 @@ export const getEntradas = () => {
     fetchData();
   }, []);
 
-  const refetch = () => {
-    fetchData();
+  const refetch = async () => {
+    try {
+      setLoading(true);
+      const snapshot = await DB_ENTRADAS.orderBy('id_entrada', 'asc').get();
+      const nuevasEntradas = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setEntradas(nuevasEntradas);
+      await AsyncStorage.setItem('cachedEntradas', JSON.stringify(nuevasEntradas));
+      setLoading(false);
+
+    } catch (error) {
+      console.error('Error al realizar el refetch desde Firestore: ', error);
+      setLoading(false);
+    }
   };
 
   return { entradas: entradas, loading, refetch };
@@ -51,9 +74,10 @@ export const getLastIDEntradas = async () => {
 }
 
 // Agregar Nuevo Producto
-export const addNewEntrada = async (datos) => {
+export const addNewEntrada = async (datos, refetchCallback) => {
   try {
     await DB_ENTRADAS.add(datos);
+    await refetchCallback();
     return { success: true, message: 'Compra agregada correctamente.' };
   } catch (error) {
     console.error("Error al agregar la entrada:", error);

@@ -5,7 +5,7 @@ import { View, Text, SafeAreaView, StatusBar, FlatList, StyleSheet, ActivityIndi
 import { getEntradas } from "../Api/Entries.api";
 
 export default function EntriesHistory() {
-  const { entradas, loading, refetch } = getEntradas();
+  const { entradas, loading } = getEntradas();
 
   if (loading) {
     return (
