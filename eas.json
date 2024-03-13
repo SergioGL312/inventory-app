@@ -22,6 +22,9 @@
       }
     },
     "production": {
+      "android": {
+        "buildType": "apk"
+      },
       "env": {
         "FIREBASE_API_KEY": "AIzaSyCccvuVYLDdgyiggFhBk_D234kBXUmAg3I",
         "FIREBASE_AUTH_DOMAIN": "inventory-app-171ee.firebaseapp.com",
