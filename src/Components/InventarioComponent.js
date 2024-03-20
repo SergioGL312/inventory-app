@@ -27,7 +27,7 @@ const InventarioComponent = memo(({ screen, navigation, route, productos, select
             onPress={() => toggleItemSelection(item)}
           >
             <View>
-              <Image source={{ uri: 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
+              <Image source={{ uri: item.url ? item.url : 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
             </View>
             <View style={styles.textContainer}>
               <Text style={styles.productoNombre}>{item.nombre}</Text>
@@ -44,7 +44,7 @@ const InventarioComponent = memo(({ screen, navigation, route, productos, select
           >
 
             <View>
-              <Image source={{ uri: 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
+              <Image source={{ uri: item.url ? item.url : 'https://picsum.photos/200/200' }} style={styles.productoImagen} />
             </View>
             <View style={styles.textContainer}>
               <Text style={styles.productoNombre}>{item.nombre}</Text>

@@ -5,6 +5,7 @@ import { View, StyleSheet, TouchableOpacity, ActivityIndicator, Alert } from 're
 import filter from 'lodash.filter';
 // API
 import { addNewProduct, getLastIDProductos, getProductos, eliminarProductoPorID } from '../Api/Products.api';
+import { uploadImage } from '../Api/Images.api';
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 // HOOKS
@@ -28,9 +29,10 @@ export default function Inventory({ navigation, route }) {
   const [selectedItems, setSelectedItems] = useState([]);
   const [isLoadingAddNewP, setIsLoadingAddNewP] = useState(false);
   const [isLoadingDelete, setIsLoadingDelete] = useState(false);
+  const [selectedImage, setSelectedImage] = useState("");
 
   useEffect(() => {
-    if (pantallaAnterior === 'Incoming2' || pantallaAnterior === 'Outcoming2' ) {
+    if (pantallaAnterior === 'Incoming2' || pantallaAnterior === 'Outcoming2') {
       navigation.navigate('Main');
     } else {
       setScreen(pantallaAnterior);
@@ -59,7 +61,7 @@ export default function Inventory({ navigation, route }) {
   const [loaded] = useFonts({
     FontAwesome: require('@expo/vector-icons/build/vendor/react-native-vector-icons/Fonts/FontAwesome.ttf'),
   });
-  
+
   if (!loaded) {
     return <ActivityIndicator />;
   }
@@ -67,6 +69,10 @@ export default function Inventory({ navigation, route }) {
   const filteredProductos = filter(productos, (producto) =>
     producto.nombre.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  const handleSelectedImage = (imageUri) => {
+    setSelectedImage(imageUri);
+  };
 
   const onChangeTextNewProduct = (text) => {
     setTextNewProduct(text);
@@ -81,6 +87,7 @@ export default function Inventory({ navigation, route }) {
     setIsLoadingAddNewP(true);
     try {
       const lastId = await getLastIDProductos();
+      const downloadURL = await uploadImage(selectedImage, lastId);
 
       const nuevoProducto = {
         id_producto: lastId,
@@ -88,6 +95,7 @@ export default function Inventory({ navigation, route }) {
         entradas: 0,
         salidas: 0,
         stock_actual: cantNewProduct,
+        url: downloadURL
       };
 
       addNewProduct(nuevoProducto)
@@ -100,6 +108,7 @@ export default function Inventory({ navigation, route }) {
                 onPress: () => {
                   setTextNewProduct('');
                   setCantNewProduct(0);
+                  setSelectedImage("");
                   setIsLoadingAddNewP(false);
                 },
               },
@@ -116,6 +125,7 @@ export default function Inventory({ navigation, route }) {
       hide();
       setTextNewProduct('');
       setCantNewProduct(0);
+      setSelectedImage("");
     } catch (error) {
       console.error('Error al obtener el último ID de productos:', error);
     }
@@ -187,6 +197,8 @@ export default function Inventory({ navigation, route }) {
         onChangeCantNewProduct={onChangeCantNewProduct}
         saveNewProduct={saveNewProduct}
         textNewProduct={textNewProduct}
+        selectedImage={selectedImage} // Pasar el valor a NewProductOverlayComponent
+        onSelectImage={handleSelectedImage} // Pasar la función para actualizar el valor
       />
 
       <View style={styles.buttonsContainer}>

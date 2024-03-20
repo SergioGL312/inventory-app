@@ -5,6 +5,7 @@
 
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/firestore';
+import 'firebase/compat/storage';
 
 import {
     FIREBASE_API_KEY,
@@ -29,6 +30,7 @@ const firebaseConfig = {
 // const app = initializeApp(firebaseConfig);
 export const FIREBASE_APP = firebase.initializeApp(firebaseConfig);;
 export const FIREBASE_DB = firebase.firestore(FIREBASE_APP);
+export const FIREBASE_STORAGE = firebase.storage(FIREBASE_APP);
 
 export const PRODUCTOS = FIREBASE_DB.collection('productos');
 export const ENTRADAS = FIREBASE_DB.collection('entradas');

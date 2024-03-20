@@ -1,33 +1,49 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, Button, TextInput, Alert, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import { updateImage } from '../Api/Images.api';
+import { AntDesign } from '@expo/vector-icons';
 // HOOKS
 import { updateProducto } from '../Api/Products.api';
 // ROUTES
 import { ROUTES } from '../Constants/navigation.constants';
 
 export default function EditProduct({ navigation, route }) {
-  const { id, nombre, stock_actual } = route.params.producto;
+  const { id_producto, id, nombre, stock_actual, url } = route.params.producto;
   const [editedNombre, setEditedNombre] = useState(nombre);
   const [editedStockActual, setEditedStockActual] = useState(stock_actual.toString());
   const [isLoading, setIsLoading] = useState(false);
   const [isSaveButtonDisabled, setIsSaveButtonDisabled] = useState(true);
+  const [selectedImage, setSelectedImage] = useState(url);
 
   useEffect(() => {
     const hasChanges =
       editedNombre !== nombre ||
-      editedStockActual.toString() !== stock_actual.toString();
+      editedStockActual.toString() !== stock_actual.toString() ||
+      selectedImage !== url;
 
     setIsSaveButtonDisabled(!hasChanges);
-  }, [editedNombre, editedStockActual, nombre, stock_actual]);
+  }, [editedNombre, editedStockActual, nombre, stock_actual, selectedImage]);
 
   const handleSave = async () => {
     setIsLoading(true);
     setIsSaveButtonDisabled(!isSaveButtonDisabled);
     const stockValue = editedStockActual.trim() === '' ? 0 : parseInt(editedStockActual, 10);
     try {
+
+      let newImageUrl = url;
+
+      // Verifica si la imagen ha cambiado
+      if (selectedImage !== url) {
+        console.log("Si entro al if")
+        // Si ha cambiado, actualiza la imagen en Firebase Storage
+        newImageUrl = await updateImage(id_producto, selectedImage);
+      }
+      console.log(stockValue);
       await updateProducto(id, {
         nombre: editedNombre,
         stock_actual: stockValue,
+        url: newImageUrl,
       });
       Alert.alert('Editado', `Producto ${editedNombre} editado correctamente.`, [
         {
@@ -48,6 +64,20 @@ export default function EditProduct({ navigation, route }) {
     }
   };
 
+  // Funtion to select an image from galery
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    if (!result.canceled) {
+      setSelectedImage(result.assets[0].uri);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {isLoading ? (
@@ -57,25 +87,42 @@ export default function EditProduct({ navigation, route }) {
         </View>
       ) : (
         <>
+          <Text style={styles.productId}>{id_producto}</Text>
           <Text style={styles.productId}>{id}</Text>
-          <Text style={styles.label}>Nombre:</Text>
-          <TextInput
-            style={styles.input}
-            value={editedNombre}
-            onChangeText={text => setEditedNombre(text)}
-          />
-          <Text style={styles.label}>Stock Actual:</Text>
-          <TextInput
-            style={styles.input}
-            placeholder='0'
-            value={editedStockActual.toString()}
-            onChangeText={text => setEditedStockActual(text)}
-            keyboardType='numeric'
-          />
-          <Button title="Guardar" onPress={handleSave} disabled={isSaveButtonDisabled} />
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Nombre:</Text>
+            <TextInput
+              style={styles.input}
+              value={editedNombre}
+              onChangeText={text => setEditedNombre(text)}
+            />
+          </View>
+          <View style={styles.inputContainer}>
+            <Text style={styles.label}>Stock Actual:</Text>
+            <TextInput
+              style={styles.input}
+              placeholder='0'
+              value={editedStockActual.toString()}
+              onChangeText={text => setEditedStockActual(text)}
+              keyboardType='numeric'
+            />
+          </View>
+          <TouchableOpacity onPress={pickImage} style={{ marginBottom: 25 }}>
+            {selectedImage ? (
+              <Image source={{ uri: selectedImage }} style={styles.productoImagen} />
+            ) : (
+              <View style={styles.containerImg}>
+                <AntDesign name="plus" size={24} color="black" />
+                <Text style={styles.text}>Seleccionar Imagen</Text>
+              </View>
+            )}
+
+          </TouchableOpacity>
+          <View style={styles.buttonContainer}>
+            <Button title="Guardar" onPress={handleSave} disabled={isSaveButtonDisabled} />
+          </View>
         </>
       )}
-
     </View>
   );
 }
@@ -101,17 +148,41 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
     fontWeight: 'bold',
   },
+  inputContainer: {
+    marginBottom: 20,
+  },
   input: {
     height: 40,
     borderColor: 'gray',
     borderWidth: 1,
-    marginBottom: 10,
     paddingHorizontal: 10,
+    borderRadius: 10,
+  },
+  productoImagen: {
+    width: 300,
+    height: 300,
+    marginTop: 10,
+    alignSelf: 'center',
+  },
+  containerImg: {
+    width: '100%',
+    height: 200,
+    borderWidth: 2,
+    borderColor: 'black',
+    borderStyle: 'dashed',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonContainer: {
+    alignSelf: 'center',
+    width: '50%',
   },
 });
